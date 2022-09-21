@@ -66,9 +66,79 @@ public class Ch_01_Project_04
         System.out.println("twelve drummers drumming,");
     }
 
+    public static void dayManager(int day)
+    {
+        dayOfX(day);
+        
+       if (day >= 1)
+       {
+            pearTree();
+       }
+       if (day >= 2)
+       {
+            turtDoves();  
+       }
+       if (day >= 3)
+       {
+           hens();
+       }
+       if (day >= 4)
+       {
+           birds();
+       }
+       if (day >= 5)
+       {
+           rings();
+       }
+       if (day >= 6)
+       {
+           geese();
+       }
+       if (day >= 7)
+       {
+           swans();
+       }
+       if (day >= 8)
+       {
+           maids();
+       }
+       if (day >= 9)
+       {
+           ladies();
+       }
+       if (day >= 10)
+       {
+           lords();
+       }
+       if (day >= 11)
+       {
+           pipers();
+       }
+       if (day >= 12)
+       {
+           drummers();
+       }
+    }
+    
     public static void main(String[] args)
     {
-
+        day = 1;
+        quit = false;
+        
+        for (int i = 0; quit = false; i++)
+        {
+            dayManager(day);
+            
+            System.out.prrintln("Press esc to exit:");
+            
+            if (day < 12)
+            {
+            day++;
+            }
+        }
+      
+        
+        
     }
 
 }
