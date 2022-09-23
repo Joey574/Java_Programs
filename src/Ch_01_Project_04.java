@@ -1,8 +1,27 @@
 public class Ch_01_Project_04
 {
-    public static void dayOfX(String x)
+    public static void dayOfX(int x)
     {
-        System.out.println("On the" + x + " day of Christmas,");
+        System.out.print("On the " + x);
+
+        if (x == 1)
+        {
+            System.out.print("st");
+        }
+        else if (x == 2)
+        {
+            System.out.print("nd");
+        }
+        else if (x == 3)
+        {
+            System.out.print("rd");
+        }
+        else
+        {
+            System.out.print("th");
+        }
+        System.out.println(" day of Christmas,");
+
         System.out.println("my true love sent to me");
     }
 
@@ -18,7 +37,7 @@ public class Ch_01_Project_04
 
     public static void hens()
     {
-        System.out.println("three French hens");
+        System.out.println("three French hens,");
     }
 
     public static void birds()
@@ -70,71 +89,65 @@ public class Ch_01_Project_04
     {
         dayOfX(day);
         
-       if (day >= 1)
+       if (day >= 12)
        {
-            pearTree();
-       }
-       if (day >= 2)
-       {
-            turtDoves();  
-       }
-       if (day >= 3)
-       {
-           hens();
-       }
-       if (day >= 4)
-       {
-           birds();
-       }
-       if (day >= 5)
-       {
-           rings();
-       }
-       if (day >= 6)
-       {
-           geese();
-       }
-       if (day >= 7)
-       {
-           swans();
-       }
-       if (day >= 8)
-       {
-           maids();
-       }
-       if (day >= 9)
-       {
-           ladies();
-       }
-       if (day >= 10)
-       {
-           lords();
+            drummers();
        }
        if (day >= 11)
        {
-           pipers();
+            pipers();
        }
-       if (day >= 12)
+       if (day >= 10)
        {
-           drummers();
+            lords();
+       }
+       if (day >= 9)
+       {
+            ladies();
+       }
+       if (day >= 8)
+       {
+            maids();
+       }
+       if (day >= 7)
+       {
+            swans();
+       }
+       if (day >= 6)
+       {
+            geese();
+       }
+       if (day >= 5)
+       {
+            rings();
+       }
+       if (day >= 4)
+       {
+            birds();
+       }
+       if (day >= 3)
+       {
+            hens();
+       }
+       if (day >= 2)
+       {
+            turtDoves();
+       }
+       if (day >= 1)
+       {
+            pearTree();
        }
     }
     
     public static void main(String[] args)
     {
-        day = 1;
-        quit = false;
         
-        for (int i = 0; quit = false; i++)
+        for (int day = 1; day < 13; day++)
         {
             dayManager(day);
             
-            System.out.prrintln("Press esc to exit:");
-            
-            if (day < 12)
-            {
-            day++;
-            }
+            System.out.println("");
+
         }
       
         
