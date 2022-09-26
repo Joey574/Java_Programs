@@ -149,9 +149,7 @@ public class Ch_01_Project_04
             System.out.println("");
 
         }
-      
-        
-        
+
     }
 
 }
