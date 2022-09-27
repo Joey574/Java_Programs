@@ -1,3 +1,4 @@
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Ch_02_Ex_03
@@ -10,25 +11,10 @@ Pseudocode:
 Maintenance Log:
  */
 
-    public static int F(int k)
-    {
-        int out;
-
-        if (k > 2)
-        {
-            out = F(k - 1) + F(k - 2);
-        }
-        else
-        {
-            out = 1;
-        }
-
-        return out;
-    }
-
     public static void main(String[] args)
     {
         int out;
+        LinkedList <Integer> F = new LinkedList<Integer>();
 
         Scanner reader = new Scanner(System.in);
 
@@ -41,12 +27,14 @@ Maintenance Log:
 
          if (k > 2)
          {
-             out = F(k -1) + F(k-2);
+             out = F.get(k - 2) + F.get(k - 3);
          }
          else
          {
              out = 1;
          }
+
+         F.add(out);
 
          System.out.println(out);
 
