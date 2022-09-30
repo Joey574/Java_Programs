@@ -12,9 +12,9 @@ Pseudocode:
 Maintenance Log:
  */
 
-    public static final String top = "*   o";
-    public static final String upperBody = "*  /|\\";
-    public static final String lowerBody = "*  / \\";
+    public static final String top = "*  o";
+    public static final String upperBody = "* /|\\";
+    public static final String lowerBody = "* / \\";
     public static final String bottom = "******";
 
 
@@ -28,12 +28,20 @@ Maintenance Log:
 
         int x = reader.nextInt();
 
-        if (x > 1)
+        if (x >= 1)
         {
+            System.out.print(bottom);
+
             for (int i = 1; i <= x; i++)
             {
+                if (i > 1)
+                {
+                    for (int q = 0; q < (5 * i) + (i - 1); q++)
+                    {
+                        System.out.print(" ");
+                    }
+                }
 
-                System.out.print(bottom);
                 System.out.println(top);
                 System.out.print("*");
 
@@ -53,13 +61,26 @@ Maintenance Log:
                 System.out.println(lowerBody);
                 System.out.print("*");
 
-                for(int q = 0; q < (5*i) + (i - 1); q++)
+                if (i != x)
                 {
-                    System.out.print(" ");
+
+                    for(int q = 0; q < (5*i) + (i - 1); q++)
+                    {
+                        System.out.print(" ");
+                    }
+
+                    System.out.println(bottom);
+                    System.out.print("*");
+                }
+                else
+                {
+                    for(int q = 0; q < (5*i) + (i - 1); q++)
+                    {
+                        System.out.print("*");
+                    }
+                    System.out.print(bottom);
                 }
 
-                System.out.println(bottom);
-                System.out.print("*");
 
             }
         }
