@@ -1,3 +1,4 @@
+import java.lang.Math;
 public class Ch_05_Ex_05
 {
 /*
@@ -14,15 +15,15 @@ Maintenance Log:
 
         String out;
 
-        for (int i = Math.random() * 5 + 5; i > 0; i--) // random # of strings / lines
+        for (int i = (int)(Math.random() * 5) + 5; i > 0; i--) // random # of strings / lines
         {
-            for (int p = Math.random() * 80; p > 0; p--) // random # of chars per string
+            for (int p = (int)(Math.random() * 80); p > 0; p--) // random # of chars per string
             {
-                x = Math.random() * 26 + 97;
+                x = (int)(Math.random() * 26) + 97;
 
                 System.out.print((char)x);
-
             }
+            System.out.println("");
         }
     }
 
