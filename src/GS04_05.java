@@ -14,9 +14,23 @@ Maintenance Log:
     {
         String temp;
 
+        int start;
+        int end;
+
+
         for (int i = 0; i < x; i++)
         {
-           temp = s.substring(i * x, 2 * i * x);
+            if (2 * i * x > s.length())
+            {
+                end = s.length();
+            }
+            else
+            {
+                start = i * x;
+                end = 2 * i * x;
+            }
+
+           temp = s.substring(start, end);
 
            for (int p = 0; p < i * x; p++)
            {
@@ -34,6 +48,12 @@ Maintenance Log:
         int x;
 
         System.out.print("Enter String: ");
+        s = reader.nextLine();
+
+        System.out.print("Enter # of substrings: ");
+        x = reader.nextInt();
+
+        stairString(s, x);
 
     }
 }
