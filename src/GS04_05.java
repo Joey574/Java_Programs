@@ -14,28 +14,31 @@ Maintenance Log:
     {
         String temp;
 
-        int start;
+        int start = 0;
         int end;
-
 
         for (int i = 0; i < x; i++)
         {
-            if (2 * i * x > s.length())
+            start = i * (s.length() / x);
+            end = (i + 1) * (s.length() / x);
+
+            if (end > s.length())
             {
-                end = s.length();
+                temp = s.substring(start);
+            }
+            else if ((i+2) * (s.length() / x) > s.length())
+            {
+                temp = s.substring(start);
             }
             else
             {
-                start = i * x;
-                end = 2 * i * x;
+                temp = s.substring(start, end);
             }
 
-           temp = s.substring(start, end);
-
-           for (int p = 0; p < i * x; p++)
-           {
-               System.out.print(" ");
-           }
+            for (int p = 0; p < i * (s.length() / x); p++)
+            {
+                System.out.print(" ");
+            }
 
            System.out.println(temp);
         }
