@@ -92,6 +92,12 @@ Maintenance Log:
             }
         }
 
+        System.out.print("\nGuessed chars:\n");
+        for (int i = 0; i < guesses.length; i++)
+        {
+            System.out.print(guesses[i] + ", ");
+        }
+
     }
 
     public static void charGuess()
@@ -108,6 +114,8 @@ Maintenance Log:
             System.out.print("\nEnter char to guess: ");
             temp = r.nextLine();
 
+            temp = temp.toLowerCase();
+
             for (int i = 0; i < guesses.length; i++)
             {
                 if (temp.charAt(0) == guesses[i])
@@ -119,6 +127,7 @@ Maintenance Log:
             if (guessed)
             {
                 System.out.print("\nAlready guessed that char");
+                guessed = false;
                 continue;
             }
             else
@@ -163,7 +172,7 @@ Maintenance Log:
     {
         Scanner r = new Scanner(System.in);
 
-        int temp;
+        int temp = 0;
 
         boolean win = false;
         boolean lose = false;
@@ -172,37 +181,47 @@ Maintenance Log:
         System.out.print("Enter secret word: ");
         word = r.nextLine();
 
+        word = word.toLowerCase();
+
+        System.out.print("\n\n\n\n\n\n\n\n\n\n");
+
        while(!win && !lose)
        {
-            if (progress > 5)
+            if (progress > 4)
             {
                 lose = true;
             }
 
-            draw();
+            temp = 0;
 
-            while(true)
+            for (int i = 0; i < guesses.length; i++)
             {
-                System.out.print("\n1: Guess letter (cost 1 if failed)\n2: Guess word (cost 2 if failed)\nInput: ");
-                temp = r.nextInt();
-
-                if (temp == 1)
+                for (int p = 0; p < word.length(); p++)
                 {
-                    charGuess();
+                    if (word.charAt(p) == guesses[i])
+                    {
+                        temp++;
+                    }
                 }
-                else if (temp == 2)
-                {
-
-                }
-                else
-                {
-                    continue;
-                }
-                break;
             }
 
+            if (temp == word.length() - 1)
+            {
+                win = true;
+            }
+
+            draw();
+            charGuess();
 
        }
 
+       if (win)
+       {
+           System.out.print("\n\nYou win! The secret word was " + word);
+       }
+       else if (lose)
+       {
+           System.out.print("\n\nYou've lost! The secret word was " + word);
+       }
     }
 }
