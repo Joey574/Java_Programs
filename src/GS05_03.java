@@ -10,11 +10,12 @@ Pseudocode:
 Maintenance Log:
  */
 
-    static byte secretNumber [] = new byte[4];
+    static byte secretDigits [] = new byte[4];
 
-    static byte guessNumber [] = new byte[4];
+    static byte guessDigits [] = new byte[4];
 
-    static boolean checked [] = new boolean[4];
+    static boolean tChecked [] = new boolean[4];
+    static boolean bChecked [] = new boolean[4];
 
     static byte bP = 0; // correct digit, right location
     static byte wP = 0; // correct digit, wrong location
@@ -24,19 +25,19 @@ Maintenance Log:
         Scanner r = new Scanner(System.in);
 
         System.out.print("Enter ones place guess: ");
-        guessNumber[3] = r.nextByte();
+        guessDigits[3] = r.nextByte();
         System.out.print("Enter tens place guess: ");
-        guessNumber[2] = r.nextByte();
+        guessDigits[2] = r.nextByte();
         System.out.print("Enter hundreds place guess: ");
-        guessNumber[1] = r.nextByte();
+        guessDigits[1] = r.nextByte();
         System.out.print("Enter thousands place guess: ");
-        guessNumber[0] = r.nextByte();
+        guessDigits[0] = r.nextByte();
 
         System.out.print("Guess: ");
 
-        for (int i = 0; i < guessNumber.length; i++)
+        for (int i = 0; i < guessDigits.length; i++)
         {
-            System.out.print(guessNumber[i]);
+            System.out.print(guessDigits[i]);
         }
         System.out.print("\n\n");
 
@@ -47,25 +48,32 @@ Maintenance Log:
         bP = 0;
         wP = 0;
 
-        checked[0] = false;
-        checked[1] = false;
-        checked[2] = false;
-        checked[3] = false;
+        tChecked[0] = false; bChecked[0] = false;
+        tChecked[1] = false; bChecked[1] = false;
+        tChecked[2] = false; bChecked[2] = false;
+        tChecked[3] = false; bChecked[3] = false;
 
-        for (int i = 0; i < guessNumber.length; i++)
+        for (int i = 0; i < guessDigits.length; i++)
         {
-            if (guessNumber[i] == secretNumber[i])
+            if (guessDigits[i] == secretDigits[i])
             {
                 bP++;
-                checked[i] = true;
+                tChecked[i] = true;
+                bChecked[i] = true;
             }
         }
 
-        for (int i = 0; i < guessNumber.length; i++)
+        for (int i = 0; i < guessDigits.length; i++)
         {
-            for (int q = 0; q < secretNumber.length; q++)
+            for (int q = 0; q < secretDigits.length; q++)
             {
+                if (guessDigits[i] == secretDigits[q] && !bChecked[q] && !tChecked[i])
+                {
+                    wP++;
 
+                    tChecked[i] = true;
+                    bChecked[q] = true;
+                }
             }
         }
 
@@ -85,20 +93,21 @@ Maintenance Log:
         if (input == 1)
         {
             System.out.print("Enter ones place: ");
-            secretNumber[3] = r.nextByte();
+            secretDigits[3] = r.nextByte();
             System.out.print("Enter tens place: ");
-            secretNumber[2] = r.nextByte();
+            secretDigits[2] = r.nextByte();
             System.out.print("Enter hundreds place: ");
-            secretNumber[1] = r.nextByte();
+            secretDigits[1] = r.nextByte();
             System.out.print("Enter thousands place: ");
-            secretNumber[0] = r.nextByte();
+            secretDigits[0] = r.nextByte();
+            System.out.print("\n\n\n\n\n\n\n\n\n\n\n\n");
         }
         else if (input == 2)
         {
-            secretNumber[0] += (int) ((java.lang.Math.random() - 0.1) * 10); // thousands place
-            secretNumber[1] += (int) ((java.lang.Math.random() - 0.1) * 10); // hundreds place
-            secretNumber[2] += (int) ((java.lang.Math.random() - 0.1) * 10); // tens place
-            secretNumber[3] += (int) ((java.lang.Math.random() - 0.1) * 10); // ones place
+            secretDigits[0] += (int) ((java.lang.Math.random() - 0.1) * 10); // thousands place
+            secretDigits[1] += (int) ((java.lang.Math.random() - 0.1) * 10); // hundreds place
+            secretDigits[2] += (int) ((java.lang.Math.random() - 0.1) * 10); // tens place
+            secretDigits[3] += (int) ((java.lang.Math.random() - 0.1) * 10); // ones place
         }
 
         while (!win)
@@ -116,8 +125,15 @@ Maintenance Log:
 
         if (win)
         {
-            System.out.print("Congrats you won! The secret number was:\n" + secretNumber);
+            System.out.print("Congrats you won! The secret number was:\n");
         }
+
+        for (int i = 0 ; i < secretDigits.length; i++)
+        {
+            System.out.print(secretDigits[i]);
+        }
+
+        System.out.print("\n\n");
 
 
     }
