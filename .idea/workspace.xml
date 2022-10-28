@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f12e8b23-4312-4ae3-9faf-a14d684514af" name="Changes" comment="10/25/22">
-      <change afterPath="$PROJECT_DIR$/mastermind_4p6c.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/GS06_01.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Mastermind_Tester.java" afterDir="false" />
+    <list default="true" id="f12e8b23-4312-4ae3-9faf-a14d684514af" name="Changes" comment="10/26/22">
+      <change afterPath="$PROJECT_DIR$/src/Group_Project.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GS05_03.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GS05_03.java" afterDir="false" />
     </list>
@@ -185,7 +183,14 @@
       <option name="project" value="LOCAL" />
       <updated>1666713600898</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="10/26/22">
+      <created>1666799939113</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1666799939113</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -213,6 +218,7 @@
     <MESSAGE value="10/21/22" />
     <MESSAGE value="10/24/22" />
     <MESSAGE value="10/25/22" />
-    <option name="LAST_COMMIT_MESSAGE" value="10/25/22" />
+    <MESSAGE value="10/26/22" />
+    <option name="LAST_COMMIT_MESSAGE" value="10/26/22" />
   </component>
 </project>

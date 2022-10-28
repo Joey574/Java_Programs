@@ -10,18 +10,10 @@ Pseudocode:
 Maintenance Log:
  */
 
-    static byte secretDigits [] = new byte[4];
-
-    static byte guessDigits [] = new byte[4];
-
-    static boolean tChecked [] = new boolean[4];
-    static boolean bChecked [] = new boolean[4];
-
-    static byte bP = 0; // correct digit, right location
-    static byte wP = 0; // correct digit, wrong location
-
-    public static void guessHandler()
+    public static byte [] guessHandler()
     {
+        byte guessDigits [] = new byte [4];
+
         Scanner r = new Scanner(System.in);
 
         System.out.print("Enter ones place guess: ");
@@ -41,12 +33,17 @@ Maintenance Log:
         }
         System.out.print("\n\n");
 
+        return guessDigits;
+
     }
 
-    public static void checkGuess()
+    public static byte [] checkGuess(byte guessDigits[], byte secretDigits[])
     {
-        bP = 0;
-        wP = 0;
+        boolean tChecked [] = new boolean[4];
+        boolean bChecked [] = new boolean[4];
+
+        byte bP = 0;
+        byte wP = 0;
 
         tChecked[0] = false; bChecked[0] = false;
         tChecked[1] = false; bChecked[1] = false;
@@ -77,10 +74,19 @@ Maintenance Log:
             }
         }
 
+        return new byte[] {bP, wP};
+
     }
 
     public static void main(String[] args)
     {
+        byte secretDigits[] = new byte[4];
+
+        byte guessDigits[] = new byte[4];
+
+        byte pegs[] = new byte[2];
+
+
         Scanner r = new Scanner(System.in);
 
         int input;
@@ -112,12 +118,12 @@ Maintenance Log:
 
         while (!win)
         {
-            guessHandler();
-            checkGuess();
+            guessDigits = guessHandler();
+            pegs = checkGuess(guessDigits, secretDigits);
 
-            System.out.print("Black pegs: " + bP + "\nWhite pegs: " + wP + "\n\n");
+            System.out.print("Black pegs: " + pegs[0] + "\nWhite pegs: " + pegs[1] + "\n\n");
 
-            if (bP == 4)
+            if (pegs[0] == 4)
             {
                 win = true;
             }
@@ -125,7 +131,7 @@ Maintenance Log:
 
         if (win)
         {
-            System.out.print("Congrats you won! The secret number was:\n");
+            System.out.print("Congrats you won! The secret number was:\n\n");
         }
 
         for (int i = 0 ; i < secretDigits.length; i++)
@@ -133,7 +139,7 @@ Maintenance Log:
             System.out.print(secretDigits[i]);
         }
 
-        System.out.print("\n\n");
+        System.out.print("\n");
 
 
     }
