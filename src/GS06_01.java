@@ -14,3 +14,20 @@ Maintenance Log:
 
     }
 }
+
+class ticket
+{
+    private int number;
+
+    public float getPrice()
+    {
+
+    }
+
+    public String toString()
+    {
+
+    }
+
+
+}

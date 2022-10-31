@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f12e8b23-4312-4ae3-9faf-a14d684514af" name="Changes" comment="10/26/22">
-      <change afterPath="$PROJECT_DIR$/src/Group_Project.java" afterDir="false" />
+    <list default="true" id="f12e8b23-4312-4ae3-9faf-a14d684514af" name="Changes" comment="10/28/22">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GS05_03.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GS05_03.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GS06_01.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GS06_01.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -190,7 +189,14 @@
       <option name="project" value="LOCAL" />
       <updated>1666799939113</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="10/28/22">
+      <created>1666970388780</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1666970388780</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -219,6 +225,7 @@
     <MESSAGE value="10/24/22" />
     <MESSAGE value="10/25/22" />
     <MESSAGE value="10/26/22" />
-    <option name="LAST_COMMIT_MESSAGE" value="10/26/22" />
+    <MESSAGE value="10/28/22" />
+    <option name="LAST_COMMIT_MESSAGE" value="10/28/22" />
   </component>
 </project>
