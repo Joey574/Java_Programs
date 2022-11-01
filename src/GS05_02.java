@@ -1,3 +1,4 @@
+import java.util.Random;
 import java.util.Scanner;
 
 public class GS05_02
@@ -172,18 +173,47 @@ Maintenance Log:
     {
         Scanner r = new Scanner(System.in);
 
+        Random randI = new Random();
+
         int temp = 0;
 
         boolean win = false;
         boolean lose = false;
 
+        String wordArray [] = new String[10];
+        wordArray[0] = "programming";
+        wordArray[1] = "computers";
+        wordArray[2] = "engineering";
+        wordArray[3] = "science";
+        wordArray[4] = "halloween";
+        wordArray[5] = "jupiter";
+        wordArray[6] = "desk";
+        wordArray[7] = "olympics";
+        wordArray[8] = "java";
+        wordArray[9] = "unity";
 
-        System.out.print("Enter secret word: ");
-        word = r.nextLine();
+        System.out.print("Menu\n1: Enter custom word\n2: Random word\nInput: ");
+        temp = r.nextInt();
 
-        word = word.toLowerCase();
+        if (temp == 1)
+        {
+            System.out.print("Enter secret word: ");
+            word = r.nextLine();
 
-        System.out.print("\n\n\n\n\n\n\n\n\n\n");
+            word = word.toLowerCase();
+
+            System.out.print("\n\n\n\n\n\n\n\n\n\n");
+
+        }
+        else if (temp == 2)
+        {
+            word = wordArray[randI.nextInt(10)];
+        }
+        else
+        {
+            System.out.print("Error expected 1 or 2");
+        }
+
 
        while(!win && !lose)
        {
@@ -223,5 +253,6 @@ Maintenance Log:
        {
            System.out.print("\n\nYou've lost! The secret word was " + word);
        }
+       System.out.print("\n");
     }
 }

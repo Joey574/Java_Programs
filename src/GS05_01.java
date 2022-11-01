@@ -194,13 +194,15 @@ Maintenance Log:
             turn++;
         }
 
+        display(board);
+
         if (!tie)
         {
-            System.out.print("Player " + ((turn % 2) + 1) + " wins!\n");
+            System.out.print("\n\nPlayer " + ((turn % 2) + 1) + " wins!\n");
         }
         else
         {
-            System.out.print("It's a tie!\n");
+            System.out.print("\n\nIt's a tie!\n");
         }
 
 
