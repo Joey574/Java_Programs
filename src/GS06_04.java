@@ -41,6 +41,6 @@ Maintenance Log:
         System.out.print("Enter regular Hexagon side length: ");
         h.setSideLength(r.nextFloat());
 
-        System.out.print("\n\nArea: " + h.getArea() + "\nPerimeter: " + h.getPerimeter());
+        System.out.print("\n\nArea: " + h.getArea() + "\nPerimeter: " + h.getPerimeter() + "\n");
     }
 }
