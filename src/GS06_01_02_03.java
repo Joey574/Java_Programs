@@ -18,6 +18,7 @@ Maintenance Log:
     {
         private int tickerNumber;
         private int days;
+        private float price;
 
         public int getTickerNumber()
         {
@@ -31,7 +32,7 @@ Maintenance Log:
 
         public float getPrice()
         {
-            return 50;
+            return price;
         }
 
         public String toString()
@@ -42,9 +43,11 @@ Maintenance Log:
 
     class advanceTicket extends tickets{
 
-        float price;
+        
         public float getPrice()
         {
+            float p;
+            
             if (getDays() > 9)
             {
                 price = 30;
@@ -53,7 +56,7 @@ Maintenance Log:
             {
                 price = 40;
             }
-            return price;
+            return p;
         }
     }
 
