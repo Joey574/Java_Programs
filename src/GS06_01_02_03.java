@@ -16,92 +16,64 @@ Maintenance Log:
 
     class tickets
     {
+        private int tickerNumber;
         private int days;
-        private int ticketNumber;
-        private boolean student;
 
-        advanceTicket a = new advanceTicket();
-        studentAdvanceTicket sA = new studentAdvanceTicket();
-        walkUpTicket w = new walkUpTicket();
-
-        public String toString()
+        public int getTickerNumber()
         {
-            if
+            return tickerNumber;
         }
 
-
-    }
-
-    class advanceTicket {
-        private int days;
-
-        private int ticketNumber = 1;
-
-        public int getTicketNumber() {
-            ticketNumber++;
-            return ticketNumber - 1;
-        }
-
-        public float getPrice() {
-            float price = 0;
-
-            if (days > 9) {
-                price = 30;
-            } else if (days < 9 && days > 0) {
-                price = 40;
-            }
-
-            return price;
-        }
-
-        public String toString() {
-            String ticket = "Number: " + ticketNumber + ", Price: " + getPrice();
-
-            ticketNumber++;
-
-            return ticket;
-        }
-
-    }
-
-    class studentAdvanceTicket {
-
-        private int days;
-
-        public String toString() {
-            return "Number: " + a.getTicketNumber() + ", Price: " + getPrice();
+        public int getDays()
+        {
+            return days;
         }
 
         public float getPrice()
         {
-            float price;
+            return 50;
+        }
 
-            if (days > 9)
+        public String toString()
+        {
+            return "Number: " + getTickerNumber() + ", Price: " + getPrice();
+        }
+    }
+
+    class advanceTicket extends tickets{
+
+        float price;
+        public float getPrice()
+        {
+            if (getDays() > 9)
             {
-                price = 15;
+                price = 30;
             }
             else
             {
-                price = 20;
+                price = 40;
             }
-
             return price;
         }
     }
 
-    class walkUpTicket {
-        advanceTicket a = new advanceTicket();
+    class studentAdvanceTicket extends advanceTicket{
+
+        public float getPrice() {
+            return super.getPrice() / 2;
+        }
 
         public String toString()
         {
-            return "Number: " + a.getTicketNumber() + ", Price: " + getPrice();
+            return super.toString() + "(ID Required)";
         }
+    }
 
+    class walkUpTicket extends tickets{
         public float getPrice()
         {
-            return (float) 50;
+            return 50;
         }
     }
 
 }
-
