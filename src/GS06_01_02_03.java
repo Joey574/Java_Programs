@@ -50,11 +50,11 @@ Maintenance Log:
             
             if (getDays() > 9)
             {
-                price = 30;
+                p = 30;
             }
             else
             {
-                price = 40;
+                p = 40;
             }
             return p;
         }
