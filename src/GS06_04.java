@@ -10,7 +10,7 @@ Pseudocode:
 Maintenance Log:
  */
 
-    static class hexagon
+    static class hexagon implements Shape
     {
         private float sideLength;
 
@@ -19,7 +19,7 @@ Maintenance Log:
             return ((3 * Math.sqrt(3)) / 2) * (sideLength * sideLength);
         }
 
-        public float getPerimeter()
+        public double getPerimeter()
         {
             return sideLength * 6;
         }
@@ -42,5 +42,11 @@ Maintenance Log:
         h.setSideLength(r.nextFloat());
 
         System.out.print("\n\nArea: " + h.getArea() + "\nPerimeter: " + h.getPerimeter() + "\n");
+    }
+
+    public interface Shape
+    {
+        public double getArea();
+        public double getPerimeter();
     }
 }

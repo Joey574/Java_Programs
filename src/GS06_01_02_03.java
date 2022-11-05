@@ -42,7 +42,6 @@ Maintenance Log:
     }
 
     class advanceTicket extends tickets{
-
         
         public float getPrice()
         {
