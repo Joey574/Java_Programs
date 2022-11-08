@@ -5,6 +5,20 @@ import java.util.Scanner;
 
 public class GS07_05
 {
+    
+    public static String reverse(String t)
+    {
+     
+        for (int i = 0; i < t.size(); i++)
+        {
+            if (t.charAt(i) == ' ')
+            {
+                   
+            }
+        }
+        
+    }
+    
     public static void main(String[] args) throws FileNotFoundException
     {
         String fileName = "GS07_05_File.txt";
@@ -14,9 +28,11 @@ public class GS07_05
 
         ArrayList <String> File = new ArrayList<String>();
 
-        while (lineScanner.hasNextLine())
+        for (int i = 0; lineScanner.hasNextLine(); i++)
         {
-            String line = lineScanner.nextLine();
+            File.add(0, lineScanner.nextLine());
+            
+           
         }
     }
 }
