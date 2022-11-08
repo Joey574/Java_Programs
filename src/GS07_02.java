@@ -1,8 +1,7 @@
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class GS07_01
+public class GS07_02
 {
 /*
 Author: Joey Soroka
@@ -12,21 +11,23 @@ Pseudocode:
 Maintenance Log:
  */
 
-    public static ArrayList<Integer> scaleByK(ArrayList<Integer> t)
+    public static ArrayList<Integer> minToFront(ArrayList<Integer> t)
     {
-        ArrayList<Integer> x = new ArrayList<Integer>();
+        int temp = 0;
 
-        for (int i = 0; i < t.size(); i++)
+        for (int i = 1; i < t.size(); i++)
         {
-            for (int p = 0; p < t.get(i); p++)
+            if (t.get(i) < t.get(i - 1))
             {
-                x.add(t.get(i));
+                temp = i;
             }
         }
 
-        return x;
-    }
+        t.add(0, t.get(temp));
+        t.remove(temp + 1);
 
+        return t;
+    }
 
     public static void main(String[] args)
     {
@@ -45,9 +46,8 @@ Maintenance Log:
 
         System.out.print("Input: " + t + "\n");
 
-        t = scaleByK(t);
+        t = minToFront(t);
 
         System.out.print("Output: " + t);
-
     }
 }
