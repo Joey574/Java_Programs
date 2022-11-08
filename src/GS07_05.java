@@ -14,7 +14,7 @@ public class GS07_05
         
         String temp = "";
         
-        for (int i = 0; i < t.size(); i++)
+        for (int i = t.size(); i > 0; i--)
         {
             if (t.charAt(i) == ' ')
             {
