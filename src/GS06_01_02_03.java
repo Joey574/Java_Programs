@@ -14,40 +14,41 @@ Maintenance Log:
 
     }
 
-    class tickets
+    class Ticket
     {
-        private int tickerNumber;
-        private int days;
-        private float price;
+        private int number;
 
-        public int getTickerNumber()
+        Ticket(int number)
         {
-            return tickerNumber;
-        }
-
-        public int getDays()
-        {
-            return days;
+            this.number = number;
         }
 
         public float getPrice()
         {
-            return price;
+            return 0;
         }
 
         public String toString()
         {
-            return "Number: " + getTickerNumber() + ", Price: " + getPrice();
+            return "Number: " + number + ", Price: " + getPrice();
         }
     }
 
-    class advanceTicket extends tickets{
-        
+    class advanceTicket extends Ticket{
+
+        int days;
+
+        advanceTicket(int number, int days)
+        {
+            super(number);
+            this.days = days;
+        }
+
         public float getPrice()
         {
             float p;
             
-            if (getDays() > 9)
+            if (days > 9)
             {
                 p = 30;
             }
@@ -61,17 +62,25 @@ Maintenance Log:
 
     class studentAdvanceTicket extends advanceTicket{
 
+        studentAdvanceTicket(int number, int days) {
+            super(number, days);
+        }
+
         public float getPrice() {
             return super.getPrice() / 2;
         }
 
         public String toString()
         {
-            return super.toString() + "(ID Required)";
+            return super.toString() + " (ID Required)";
         }
     }
 
-    class walkUpTicket extends tickets{
+    class walkUpTicket extends Ticket{
+        walkUpTicket(int number) {
+            super(number);
+        }
+
         public float getPrice()
         {
             return 50;
