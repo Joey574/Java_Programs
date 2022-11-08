@@ -42,6 +42,12 @@ public class GS07_05
         {
             File.add(0, lineScanner.nextLine());           
         }
+        
+        for (int i = 0; i < File.size(); i++)
+        {
+            File.add(i, reverse(File.at(i)));
+            File.remove (i + 1);
+        }
     }
 }
 
