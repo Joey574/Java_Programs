@@ -9,14 +9,24 @@ public class GS07_05
     public static String reverse(String t)
     {
      
+        int start = 0;
+        int stop = 0;
+        
+        String temp = "";
+        
         for (int i = 0; i < t.size(); i++)
         {
             if (t.charAt(i) == ' ')
             {
-                   
+                stop = i;
+                temp += t.subString(start, stop);
+                start = i;
             }
         }
         
+        temp += t.subString(start);
+        
+        return temp;        
     }
     
     public static void main(String[] args) throws FileNotFoundException
@@ -28,11 +38,9 @@ public class GS07_05
 
         ArrayList <String> File = new ArrayList<String>();
 
-        for (int i = 0; lineScanner.hasNextLine(); i++)
+        while (lineScanner.hasNextLine())
         {
-            File.add(0, lineScanner.nextLine());
-            
-           
+            File.add(0, lineScanner.nextLine());           
         }
     }
 }
