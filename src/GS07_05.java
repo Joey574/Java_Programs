@@ -8,25 +8,29 @@ public class GS07_05
     
     public static String reverse(String t)
     {
-     
         int start = 0;
         int stop = 0;
+
+        ArrayList <String> temp = new ArrayList<String>();
+
+        String out = "";
         
-        String temp = "";
-        
-        for (int i = t.size(); i > 0; i--)
+        for (int i = 0; i < t.length(); i++)
         {
             if (t.charAt(i) == ' ')
             {
                 stop = i;
-                temp += t.subString(start, stop);
+                temp.add(0, t.substring(start, stop)) ;
                 start = i;
             }
         }
         
-        temp += t.subString(start);
+        for (int i = 0; i < temp.size(); i++)
+        {
+            out += temp.get(i);
+        }
         
-        return temp;        
+        return out;
     }
     
     public static void main(String[] args) throws FileNotFoundException
@@ -45,8 +49,13 @@ public class GS07_05
         
         for (int i = 0; i < File.size(); i++)
         {
-            File.add(i, reverse(File.at(i)));
+            File.add(i, reverse(File.get(i)));
             File.remove (i + 1);
+        }
+
+        for (int i = 0; i < File.size(); i++)
+        {
+            System.out.println(File.get(i));
         }
     }
 }
