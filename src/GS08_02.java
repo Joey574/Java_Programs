@@ -15,16 +15,13 @@ Maintenance Log:
     {
         x.sort(Comparator.naturalOrder());
 
-        ArrayList<Integer> out = new ArrayList<Integer>();
-
         Set<Integer> t = new HashSet<Integer>(x);
 
-        for (int i = 0; i < t.size(); i++)
-        {
-            out.add(t.);
-        }
+        Integer temp [] = new Integer[t.size()];
 
-        return x;
+        t.toArray(temp);
+
+        return new ArrayList<Integer>(Arrays.asList(temp));
     }
 
     public static void main(String[] args)
