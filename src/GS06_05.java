@@ -14,7 +14,7 @@ Maintenance Log:
         double getSurfaceArea();
     }
 
-    public class Cube implements Shape
+    public class RectangularPrism implements Shape
     {
         private float width;
         private float height;
@@ -28,7 +28,7 @@ Maintenance Log:
         }
     }
 
-    public class RectangularPrism extends Cube
+    public class Cube extends RectangularPrism
     {
 
     }
@@ -46,7 +46,7 @@ Maintenance Log:
 
         public double getVolume()
         {
-            return (double) (1/3) * (base * base) * height;
+            return (double) (1.0/3.0) * (base * base) * height;
         }
     }
 
@@ -73,7 +73,7 @@ Maintenance Log:
         }
 
         public double getVolume() {
-            return (double) (4/3) * Math.PI * (radius * radius * radius);
+            return (double) (4.0/3.0) * Math.PI * (radius * radius * radius);
         }
     }
 

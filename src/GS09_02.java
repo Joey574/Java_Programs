@@ -19,9 +19,4 @@ Maintenance Log:
 
         return temp.size();
     }
-
-    public static void main(String[] args)
-    {
-
-    }
 }

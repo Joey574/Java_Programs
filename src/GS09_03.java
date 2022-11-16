@@ -20,7 +20,7 @@ Maintenance Log:
         String temp;
         String longest = "";
 
-        LinkedList<String> stringSet = new LinkedList<String>();
+        LinkedList<String> stringSet = new LinkedList<String>(in);
 
         Iterator<String> i = stringSet.iterator();
 
@@ -35,10 +35,5 @@ Maintenance Log:
         }
 
         return longest.length();
-    }
-
-    public static void main(String[] args)
-    {
-
     }
 }

@@ -18,9 +18,4 @@ Maintenance Log:
 
         return in;
     }
-
-    public static void main(String[] args)
-    {
-
-    }
 }
