@@ -15,23 +15,18 @@ Maintenance Log:
     {
         if (n > 0)
         {
-            if (f + s == 0)
-            {
-                System.out.print("1");
-                fibonacci(n -1, 1, f);
+            if (f  + s == 1) {
+                System.out.print((f + s));
             }
-            else
-            {
-                System.out.print(", " + f + s);
-                fibonacci(n -1, f + s, f);
+            else {
+                System.out.print(", " + (f + s));
             }
-
+                fibonacci(n - 1, f + s, f);
         }
         else
         {
             System.out.print("");
         }
-
     }
 
     public static void main(String[] args)
@@ -41,6 +36,6 @@ Maintenance Log:
         System.out.print("Enter how many numbers in fibonacci sequence to display: ");
         int temp = r.nextInt();
 
-        fibonacci(temp, 0, 0);
+        fibonacci(temp, 1, 0);
     }
 }
