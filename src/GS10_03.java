@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class GS10_03 {
@@ -11,46 +13,46 @@ Pseudocode:
 Maintenance Log:
  */
 
-    static ArrayList<Integer> selectionSort(ArrayList<Integer> in)
+    public static void Swap (int [] list, int x, int y)
     {
-        Integer longestLoc = null;
-        int longest = 0;
-        int t;
+        int temp = list[x];
+        list[x] = list[y];
+        list[y] = temp;
+    }
 
-        for (int i = 0; i < in.size(); i++) {
-            if (in.get(i) > longest) {
-                longestLoc = i;
-                longest = in.get(i);
+    static void selectionSort(int [] in)
+    {
+        int max = 0;
+        for (int l = 1; l < in.length; l++) {
+            for (int i = 1 + l; i < in.length; i++) {
+                if (in[max] < in[i]) {
+                    max = i;
+                }
             }
+            Swap(in, l, max);
         }
-
-        if (longestLoc != null) {
-            t = longestLoc;
-            in.remove(t);
-            in.add(longest);
-        }
-        return in;
     }
 
     public static void main(String[] args)
     {
         Scanner r = new Scanner(System.in);
 
-        ArrayList<Integer> t = new ArrayList<Integer>();
 
         System.out.print("Enter number of elements in array: ");
         int temp = r.nextInt();
 
+        int [] t = new int [temp];
+
         for (int i = 0; i < temp; i++)
         {
             System.out.print("Enter " + (i + 1) + " element of array: ");
-            t.add(r.nextInt());
+            t[i] = r.nextInt();
         }
 
-        System.out.print("Input: " + t + "\n");
+        System.out.print("Input: " + Arrays.toString(t) + "\n");
 
-        t = selectionSort(t);
+        selectionSort(t);
 
-        System.out.print("Output: " + t);
+        System.out.print("Output: " + Arrays.toString(t));
     }
 }
