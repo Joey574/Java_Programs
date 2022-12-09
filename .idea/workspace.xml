@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f12e8b23-4312-4ae3-9faf-a14d684514af" name="Changes" comment="12/6/22">
+    <list default="true" id="f12e8b23-4312-4ae3-9faf-a14d684514af" name="Changes" comment="12/7/22">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GS10_03.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GS10_03.java" afterDir="false" />
     </list>
@@ -260,7 +260,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670349117405</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="12/7/22">
+      <created>1670432369094</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1670432369094</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -299,6 +306,7 @@
     <MESSAGE value="12/2/22" />
     <MESSAGE value="12/5/22" />
     <MESSAGE value="12/6/22" />
-    <option name="LAST_COMMIT_MESSAGE" value="12/6/22" />
+    <MESSAGE value="12/7/22" />
+    <option name="LAST_COMMIT_MESSAGE" value="12/7/22" />
   </component>
 </project>

@@ -20,16 +20,17 @@ Maintenance Log:
         list[y] = temp;
     }
 
-    static void selectionSort(int [] in)
+    static void selectionSort(int [] in) // O(n^2) The speed in which this runs compared to normal selection sort is the same
     {
-        int max = 0;
-        for (int l = 1; l < in.length; l++) {
-            for (int i = 1 + l; i < in.length; i++) {
-                if (in[max] < in[i]) {
-                    max = i;
+        for (int i = 0; i < in.length - 1; i++) {
+            int max = 0;
+            for (int p = 0; p < in.length - i; p++) {
+                if (in[max] < in[p]) {
+                    max = p;
                 }
             }
-            Swap(in, l, max);
+            Swap(in, in.length - 1 - i, max);
+            System.out.println("Step " + i + ":  " + Arrays.toString(in));
         }
     }
 
