@@ -11,22 +11,15 @@ Pseudocode:
 Maintenance Log:
  */
 
-    public static void fibonacci (int n, int f, int s)
+    static int fibonacci (int n)
     {
-        if (n > 0)
+        if (n > 1)
         {
-            if (f  + s == 1) {
-                System.out.print((f + s));
-            }
-            else {
-                System.out.print(", " + (f + s));
-            }
-                fibonacci(n - 1, f + s, f);
+            n = fibonacci(n - 1) + fibonacci(n - 2);
         }
-        else
-        {
-            System.out.print("");
-        }
+
+        System.out.print(n + ", ");
+        return n;
     }
 
     public static void main(String[] args)
@@ -36,6 +29,6 @@ Maintenance Log:
         System.out.print("Enter how many numbers in fibonacci sequence to display: ");
         int temp = r.nextInt();
 
-        fibonacci(temp, 1, 0);
+        int t = fibonacci(temp);
     }
 }
