@@ -5,10 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f12e8b23-4312-4ae3-9faf-a14d684514af" name="Changes" comment="12/9/22">
-      <change afterPath="$PROJECT_DIR$/GS10_04_File.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/GS11_01.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/GS11_02.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/GS11_03.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GS10_01.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GS10_01.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GS10_04.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GS10_04.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

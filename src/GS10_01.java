@@ -11,13 +11,19 @@ Pseudocode:
 Maintenance Log:
  */
 
+    static int fibonacciHelper(int n)
+    {
+        if (n > 1) {
+            n = fibonacciHelper(n - 1) + fibonacciHelper(n - 2);
+        }
+        return n;
+    }
+
     static int fibonacci (int n)
     {
-        if (n > 1)
-        {
-            n = fibonacci(n - 1) + fibonacci(n - 2);
+        if (n > 1) {
+            n = fibonacci(n - 1) + fibonacciHelper(n - 2);
         }
-
         System.out.print(n + ", ");
         return n;
     }
