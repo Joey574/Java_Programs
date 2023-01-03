@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class StartingTemplate
 {
 
@@ -8,6 +10,7 @@ Purpose:
 Pseudocode:
 Maintenance Log:
  */
+
 
     public static void main(String[] args)
     {

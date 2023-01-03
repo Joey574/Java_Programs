@@ -15,10 +15,21 @@ Maintenance Log:
     static void writeSequence(int n)
     {
         if (n > 0) {
-            System.out.print((n/2) + " ");
-            writeSequence(n - 1);
-            System.out.print((n/2) + " ");
+            if (n % 2 == 0) {
+                System.out.print(n/2 + " ");
+            }
+            else {
+                System.out.print((n+1)/2 + " ");
+            }
+            writeSequence(n - 2);
+            if (n % 2 == 0) {
+                System.out.print(n/2 + " ");
+            }
+            else {
+                System.out.print((n+1)/2 + " ");
+            }
         }
+
     }
 
     public static void main(String[] args)
