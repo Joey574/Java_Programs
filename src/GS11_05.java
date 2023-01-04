@@ -11,17 +11,29 @@ Pseudocode:
 Maintenance Log:
  */
 
-    static int fibonacciHelper (int f, int s) {
 
+    public static int fibonacciHelper(int n, int f, int s) {
+        if (f + s == 0) {
+            n = 1;
+        } else {
+            n = f + s;
+        }
+        return n;
     }
 
-    static int fibonacci (int n) {
-        int x;
-
-        if (n > 0) {
-            x = fibonacci(n - 1) + fibonacci(n - 2);
-
+    public static int fibonacci2 (int n) {
+        if (n > 1) {
+            n = fibonacciHelper(n, fibonacci2(n - 1), fibonacci2(n - 2));
         }
+        return n;
+    }
+
+    public static int fibonacci (int n) {
+        if (n > 1) {
+           n = fibonacciHelper(n, fibonacci(n - 1), fibonacci2(n - 2));
+        }
+        System.out.print(n + " ");
+        return n;
     }
 
     public static void main(String[] args)
@@ -32,12 +44,10 @@ Maintenance Log:
         int x = r.nextInt();
 
         if (x > 0) {
-            x = fibonacci(x);
+            fibonacci(x);
         }
         else {
             throw new IllegalArgumentException("Value must be greater than 0");
         }
-
-        System.out.print(x);
     }
 }

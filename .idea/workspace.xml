@@ -4,11 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f12e8b23-4312-4ae3-9faf-a14d684514af" name="Changes" comment="12/9/22">
-      <change afterPath="$PROJECT_DIR$/src/GS11_04.java" afterDir="false" />
+    <list default="true" id="f12e8b23-4312-4ae3-9faf-a14d684514af" name="Changes" comment="1/3/23">
+      <change afterPath="$PROJECT_DIR$/GS12_01.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/GS12_01.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GS11_03.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GS11_03.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/StartingTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/StartingTemplate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GS11_05.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GS11_05.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -276,8 +276,26 @@
       <option name="project" value="LOCAL" />
       <updated>1670602778160</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="1/3/23">
+      <created>1672765187342</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1672765187342</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ID_ORDER">
+      <list>
+        <option value="Default.Root" />
+        <option value="Default.Author" />
+        <option value="Default.Date" />
+        <option value="Default.Subject" />
+        <option value="Space.CommitStatus" />
+      </list>
+    </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -291,7 +309,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="9/23/22" />
     <MESSAGE value="9/27/22" />
     <MESSAGE value="9/30/22" />
     <MESSAGE value="10/03/22" />
@@ -316,6 +333,7 @@
     <MESSAGE value="12/6/22" />
     <MESSAGE value="12/7/22" />
     <MESSAGE value="12/9/22" />
-    <option name="LAST_COMMIT_MESSAGE" value="12/9/22" />
+    <MESSAGE value="1/3/23" />
+    <option name="LAST_COMMIT_MESSAGE" value="1/3/23" />
   </component>
 </project>
