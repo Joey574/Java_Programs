@@ -1,0 +1,5 @@
+Smith   Kelly   438975  98.6    A
+Johnson Gus 210498  72.4    C
+Reges   Stu 098736  88.2    B
+Smith   Marty   346282  84.1    B
+Reges   Abe 298575  78.3    C
