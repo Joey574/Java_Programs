@@ -39,7 +39,8 @@ public class GS12_01
     }
 
     public static void main(String[] args) throws IOException {
-        String fileName = "GS12_01_File.txt";
+        //String fileName = "GS12_01_File.txt";
+        String fileName = "dictionarySorted.txt";
 
         int firstWordLoc;
         int secondWordLoc;
@@ -51,10 +52,9 @@ public class GS12_01
 
         while (lineScanner.hasNextLine())
         {
-            while (lineScanner.hasNext()) {
-                words.add(lineScanner.next());
-            }
-            System.out.println(words);
+            //while (lineScanner.hasNext()) {
+                words.add(lineScanner.nextLine());
+            //}
         }
 
         fr.close();
