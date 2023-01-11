@@ -1,8 +1,6 @@
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Scanner;
+import java.util.*;
 
 
 public class GS12_04
@@ -53,8 +51,8 @@ public class GS12_04
 
         for (int i = 0; lineScanner.hasNextLine(); i++) {
             students.add(new Student());
-            students.get(i).fName = lineScanner.next();
             students.get(i).lName = lineScanner.next();
+            students.get(i).fName = lineScanner.next();
             students.get(i).id = lineScanner.nextInt();
             students.get(i).grade = lineScanner.nextFloat();
             students.get(i).letterGrade = lineScanner.next();
@@ -62,8 +60,8 @@ public class GS12_04
 
         Scanner r = new Scanner(System.in);
 
-        int choice;
-        int aORd;
+        int choice = 0;
+        int aORd = 0;
 
         System.out.print("How would you like to arrange the data?\n1. Last name\n2. student ID\n3. Grade\nInput: ");
         int temp = r.nextInt();
@@ -85,6 +83,25 @@ public class GS12_04
             aORd = 2;
         }
 
+        if (choice == 1) {
+            students.sort(new compareByName());
+        } else if (choice == 2) {
+            students.sort(new compareByID());
+        } else if (choice == 3) {
+            students.sort(new compareByGrade());
+        }
+
+        if (aORd == 1) {
+            for (int i = 0; i < students.size(); i++) {
+                System.out.print(students.get(i).lName + ", " + students.get(i).fName);
+                System.out.println("  " + students.get(i).id + "  " + students.get(i).grade + "  " + students.get(i).letterGrade);
+            }
+        } else if (aORd == 2) {
+            for (int i = students.size() - 1; i > 0; i--) {
+                System.out.print(students.get(i).lName + ", " + students.get(i).fName);
+                System.out.println("  " + students.get(i).id + "  " + students.get(i).grade + "  " + students.get(i).letterGrade);
+            }
+        }
 
     }
 }

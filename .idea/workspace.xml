@@ -4,11 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f12e8b23-4312-4ae3-9faf-a14d684514af" name="Changes" comment="1/9/23">
-      <change afterPath="$PROJECT_DIR$/GS12_04_File.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/GS12_04.java" afterDir="false" />
+    <list default="true" id="f12e8b23-4312-4ae3-9faf-a14d684514af" name="Changes" comment="1/10/23">
+      <change afterPath="$PROJECT_DIR$/blue-mark.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/moon-surface.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/GS13_01.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GS12_03.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GS12_03.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GS12_04.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GS12_04.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,6 +44,11 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -304,7 +310,14 @@
       <option name="project" value="LOCAL" />
       <updated>1673282101984</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="1/10/23">
+      <created>1673369915504</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1673369915505</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -330,7 +343,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="10/03/22" />
     <MESSAGE value="10/04/22" />
     <MESSAGE value="10/05/22" />
     <MESSAGE value="10/07/22" />
@@ -355,6 +367,7 @@
     <MESSAGE value="1/3/23" />
     <MESSAGE value="1/6/23" />
     <MESSAGE value="1/9/23" />
-    <option name="LAST_COMMIT_MESSAGE" value="1/9/23" />
+    <MESSAGE value="1/10/23" />
+    <option name="LAST_COMMIT_MESSAGE" value="1/10/23" />
   </component>
 </project>
