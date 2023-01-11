@@ -11,29 +11,25 @@ public class GS12_01
 
     static int binarySearchStringArray(ArrayList<String> in, String target) {
         boolean complete = false;
+        
         int out = -1;
-        char [] firstLetters = new char [2];
-        firstLetters[0] = target.charAt(0);
-
         int start = 0;
-        int end = in.size();
-
+        int end = in.size() - 1;
+        
         for (int i = 0; !complete; i++) {
             int loc = (start + end) / 2;
-            if (Objects.equals(in.get(loc), target)) {
+            if (in.get(loc) == target) {
+                complete = true;
                 out = loc;
-                complete = true;
-            } else if (start == end || start > end) {
-                out = -loc;
-                complete = true;
-            } else {
-                firstLetters[1] = in.get(loc).charAt(0);
-                if (firstLetters[0] > firstLetters[1]) {
-                    start = loc;
-                } else {
-                    end = loc;
-                }
+            } else if (in.get(loc).compareTo(target) < 0) {
+                end = loc;
+            } else if (in.get(loc).compareTo(target) > 0 {
+                start = loc;
             }
+            if (start > end || start == end) {
+                complete = true;
+                out = -loc;
+            }             
         }
         return out;
     }
