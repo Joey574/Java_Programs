@@ -1,4 +1,4 @@
-import java.util.List;
+import java.util.*;
 
 public class GS13_04
 {
@@ -12,14 +12,41 @@ Maintenance Log:
  */
 
 
-    public static int maxOccurences(List<Integer> in) {
-        int t = 1;
+    public static int maxOccurrences(List<Integer> in) {
+        int t = 0;
+
+        HashMap<Integer, Integer> occurrence = new HashMap<Integer, Integer>();
+
+        for (int i = 0; i < in.size(); i++) {
+            int x = 1;
+            if (occurrence.containsKey(in.get(i))) {
+                occurrence.put(in.get(i), occurrence.get(in.get(i)) + 1);
+            } else {
+                occurrence.put(in.get(i), x);
+            }
+        }
+
+        Collection<Integer> val = occurrence.values();
+        ArrayList<Integer> temp = new ArrayList<Integer>(val);
+
+
+        for (int i = 0; i < temp.size(); i++) {
+            if (temp.get(i) > t) {
+                t = temp.get(i);
+            }
+        }
 
         return t;
     }
 
     public static void main(String[] args)
     {
+        List<Integer> p = new ArrayList<>(Arrays.asList(1, 2, 1, 4, 7, 8, 1, 3, 2, 1, 3, 4, 6, 8, 9, 1));
 
+        System.out.println("Input: " + p);
+
+        int o = maxOccurrences(p);
+
+        System.out.println("Output: " + o);
     }
 }

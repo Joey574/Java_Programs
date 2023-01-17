@@ -14,19 +14,22 @@ public class GS12_01
         
         int out = -1;
         int start = 0;
-        int end = in.size() - 1;
+        int end = in.size();
         
         for (int i = 0; !complete; i++) {
             int loc = (start + end) / 2;
-            if (in.get(loc) == target) {
+            if (Objects.equals(in.get(loc), target)) {
                 complete = true;
                 out = loc;
-            } else if (in.get(loc).compareTo(target) < 0) {
+            } else if (start == end) {
+                complete = true;
+                out = -loc;
+            } else if (in.get(loc).compareTo(target) > 0) {
                 end = loc;
-            } else if (in.get(loc).compareTo(target) > 0 {
+            } else if (in.get(loc).compareTo(target) < 0) {
                 start = loc;
             }
-            if (start > end || start == end) {
+            if (start > end) {
                 complete = true;
                 out = -loc;
             }             
@@ -71,10 +74,10 @@ public class GS12_01
         System.out.println("First word location: " + firstWordLoc);
         System.out.println("Second word location: " + secondWordLoc);
 
-        if (secondWordLoc - (firstWordLoc + 1) == 1) {
-            System.out.println("There is " + (secondWordLoc - (firstWordLoc + 1) + " word in between your inputted words"));
+        if (secondWordLoc - 1 - firstWordLoc < 0) {
+            System.out.println("There are " + (secondWordLoc + 1 - firstWordLoc + " words in between your inputted words"));
         } else {
-            System.out.println("There are " + (secondWordLoc - (firstWordLoc + 1) + " words in between your inputted words"));
+            System.out.println("There are " + (secondWordLoc - 1 - firstWordLoc + " words in between your inputted words"));
         }
     }
 }
