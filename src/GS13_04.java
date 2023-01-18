@@ -18,17 +18,14 @@ Maintenance Log:
         HashMap<Integer, Integer> occurrence = new HashMap<Integer, Integer>();
 
         for (int i = 0; i < in.size(); i++) {
-            int x = 1;
             if (occurrence.containsKey(in.get(i))) {
                 occurrence.put(in.get(i), occurrence.get(in.get(i)) + 1);
             } else {
-                occurrence.put(in.get(i), x);
+                occurrence.put(in.get(i), 1);
             }
         }
 
-        Collection<Integer> val = occurrence.values();
-        ArrayList<Integer> temp = new ArrayList<Integer>(val);
-
+        ArrayList<Integer> temp = new ArrayList<Integer>(occurrence.values());
 
         for (int i = 0; i < temp.size(); i++) {
             if (temp.get(i) > t) {
