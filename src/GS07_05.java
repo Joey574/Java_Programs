@@ -61,6 +61,7 @@ public class GS07_05
 
         ArrayList <String> fileReversed = new ArrayList<String>();
 
+
         while (lineScanner.hasNextLine())
         {
             fileReversed.add(0, lineScanner.nextLine());

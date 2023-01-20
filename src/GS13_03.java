@@ -113,4 +113,6 @@ Yes because all squares are rectangles even though not all rectangles are square
 
     public static void main(String[] args) {
 
+    }
+
 }

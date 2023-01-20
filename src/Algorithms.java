@@ -1,2 +1,31 @@
-public class Algorithms {
+import java.util.ArrayList;
+import java.util.Objects;
+
+public class Algorithms
+{
+    static int binarySearchStringArray(ArrayList<String> in, String target) {
+        boolean complete = false;
+
+        int out = -1;
+        int start = 0;
+        int end = in.size();
+
+        for (int i = 0; !complete; i++) {
+            int loc = (start + end) / 2;
+            if (Objects.equals(in.get(loc), target)) {
+                complete = true;
+                out = loc;
+            } else if (in.get(loc).compareTo(target) > 0) {
+                end = loc;
+            } else if (in.get(loc).compareTo(target) < 0) {
+                start = loc;
+            }
+            if (start > end || start == end) {
+                complete = true;
+                out = -loc;
+            }
+        }
+        return out;
+    }
+
 }
