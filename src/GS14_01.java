@@ -34,7 +34,7 @@ Maintenance Log:
         }
 
         fr.close();
-
+        
         String firstWord;
         String secondWord;
 
