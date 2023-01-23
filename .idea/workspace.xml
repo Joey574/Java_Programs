@@ -4,13 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f12e8b23-4312-4ae3-9faf-a14d684514af" name="Changes" comment="1/18/23">
-      <change afterPath="$PROJECT_DIR$/src/GS14_01.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/GS14_02.java" afterDir="false" />
+    <list default="true" id="f12e8b23-4312-4ae3-9faf-a14d684514af" name="Changes" comment="1/20/23">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Algorithms.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Algorithms.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GS07_05.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GS07_05.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GS13_03.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GS13_03.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GS14_01.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GS14_01.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -346,7 +342,14 @@
       <option name="project" value="LOCAL" />
       <updated>1674061313764</updated>
     </task>
-    <option name="localTasksCounter" value="42" />
+    <task id="LOCAL-00042" summary="1/20/23">
+      <created>1674232475918</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1674232475918</updated>
+    </task>
+    <option name="localTasksCounter" value="43" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -372,7 +375,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="10/10/22" />
     <MESSAGE value="10/19/22" />
     <MESSAGE value="10/21/22" />
     <MESSAGE value="10/24/22" />
@@ -397,6 +399,7 @@
     <MESSAGE value="1/11/23" />
     <MESSAGE value="1/17/23" />
     <MESSAGE value="1/18/23" />
-    <option name="LAST_COMMIT_MESSAGE" value="1/18/23" />
+    <MESSAGE value="1/20/23" />
+    <option name="LAST_COMMIT_MESSAGE" value="1/20/23" />
   </component>
 </project>
