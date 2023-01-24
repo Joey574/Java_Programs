@@ -41,7 +41,8 @@ Maintenance Log:
 
 
     public static void main(String[] args) throws IOException {
-        String fileName = "dictionarySorted.txt";
+        //String fileName = "dictionarySorted.txt";
+        String fileName = "dictionaryCatDog.txt"
 
         FileReader fr = new FileReader(fileName);
         Scanner lineScanner = new Scanner(fr);
