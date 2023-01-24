@@ -89,6 +89,7 @@ Maintenance Log:
                 }
             }
             if (examined) {
+                System.out.println("Element added: " + x + " Value: " + neighbors);
                 EditNeighbors.put(x, neighbors);
             }
 
