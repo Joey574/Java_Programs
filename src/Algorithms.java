@@ -1,9 +1,10 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Objects;
 
 public class Algorithms
 {
-    static int binarySearchStringArray(ArrayList<String> in, String target) {
+    public static int binarySearchStringArray(ArrayList<String> in, String target) {
         boolean complete = false;
 
         int out = -1;
@@ -27,5 +28,35 @@ public class Algorithms
         }
         return out;
     }
+
+    public static int binarySearchFirstLength(LinkedList<String> in, String target) {
+        boolean complete = false;
+
+        int out = -1;
+        int start = 0;
+        int end = in.size();
+
+        for (int i = 0; !complete; i++) {
+            int loc = (start + end) / 2;
+            if (in.get(loc).length() == target.length()) {
+                complete = true;
+                out = loc;
+            } else if (in.get(loc).length() > target.length()) {
+                end = loc;
+            } else if (in.get(loc).length() < target.length()) {
+                start = loc;
+            }
+            if (start > end || start == end) {
+                complete = true;
+                out = -loc;
+            }
+        }
+
+        for (int i = 0; in.get(out).length() == target.length(); out--) {}
+
+        return out;
+    }
+
+
 
 }

@@ -17,7 +17,7 @@ Maintenance Log:
 
 
     public static boolean isEditDistance (String in1, String in2) {
-        return letterDifference(in1, in2) < 2;
+        return letterDifference(in1, in2) < 2 && !in1.equals(in2);
     }
 
     public static int letterDifference(String i1, String i2) {
@@ -30,9 +30,9 @@ Maintenance Log:
             }
         }
 
-        if (i < i1.length() - 1) {
+        if (i < i1.length()) {
             t += i1.length() - i;
-        } else if (i < i2.length() - 1) {
+        } else if (i < i2.length()) {
             t += i2.length() - i;
         }
 
@@ -42,7 +42,8 @@ Maintenance Log:
 
     public static void main(String[] args) throws IOException {
         //String fileName = "dictionarySorted.txt";
-        String fileName = "dictionaryCatDog.txt"
+        //String fileName = "dictionaryCatDog.txt";
+        String fileName = "dictionarySortedLength.txt";
 
         FileReader fr = new FileReader(fileName);
         Scanner lineScanner = new Scanner(fr);
@@ -70,16 +71,47 @@ Maintenance Log:
         secondWord = r.nextLine();
 
         int startDif = letterDifference(firstWord, secondWord);
+        long beginTime = System.currentTimeMillis();
 
-        for (int i = 0; i < words.size(); i++) {
-            long startTime = System.currentTimeMillis();
+        int smallestTargetLengthLoc;
+
+        long startTime = System.currentTimeMillis();
+
+        if (firstWord.length() > secondWord.length()) {
+            smallestTargetLengthLoc = Algorithms.binarySearchFirstLength(words, secondWord);
+        } else {
+            smallestTargetLengthLoc = Algorithms.binarySearchFirstLength(words, firstWord);
+        }
+
+        System.out.println("Binary search time Ms: " + (System.currentTimeMillis() - startTime));
+
+        for (int i = smallestTargetLengthLoc; i < words.size(); i++) {
+
+           String x = words.get(i);
+           if (x.length() > firstWord.length() && x.length() > secondWord.length()) {
+               break;
+           }
+
+            startTime = System.currentTimeMillis();
             boolean examined = false;
+            int smallestDifFound = startDif;
 
             ArrayList<String> neighbors = new ArrayList<String>();
-            String x = words.get(i);
 
-            if (Math.abs(firstWord.length() - secondWord.length()) > Math.abs(x.length() - secondWord.length()) && letterDifference(x, secondWord) < startDif) {
+            /*
+            System.out.println("startlengthdif: " + Math.abs(firstWord.length() - secondWord.length()));
+            System.out.println("currentlengthdif: " + Math.abs(x.length() - secondWord.length()));
+            System.out.println("currentdif: " + letterDifference(x, secondWord));
+            System.out.println("Startdif: " + startDif);
+             */
+
+            if (Math.abs(firstWord.length() - secondWord.length()) >= Math.abs(x.length() - secondWord.length()) && letterDifference(x, secondWord) <= smallestDifFound) {
                 examined = true;
+
+                if (letterDifference(x, secondWord) < startDif) {
+                    smallestDifFound = letterDifference(x, secondWord);
+                }
+
                 for (String temp : words) {
                     if (Math.abs(temp.length() - x.length()) < 2) {
                         if (isEditDistance(temp, x)) {
@@ -97,32 +129,47 @@ Maintenance Log:
         }
 
         System.out.println("Map size: " + EditNeighbors.size());
+        System.out.println("Total Ms elapsed: " + (System.currentTimeMillis() - beginTime));
 
         if (EditNeighbors.containsKey(firstWord) && EditNeighbors.containsKey(secondWord)) {
             String t = firstWord;
+            boolean complete = false;
+            ArrayList<String> path = new ArrayList<>(List.of(t));
 
-            for (int i = 0; !t.equals(secondWord); i++) {
-                ArrayList<String> values = new ArrayList<String>(EditNeighbors.get(t));
-                ArrayList<Integer> valueDif = new ArrayList<>();
-                for (String value : values) {
-                    valueDif.add(letterDifference(t, value));
-                }
-                int smallestDif = valueDif.get(0);
-                int smallestDifLoc = 0;
-                for (int p = 0; p < valueDif.size(); p++) {
-                    if (valueDif.get(p) < smallestDif) {
-                        smallestDif = valueDif.get(p);
-                        smallestDifLoc = p;
-                    }
-                }
-                t = values.get(smallestDifLoc);
-                System.out.println("New value: " + t);
-            }
+           for (int i = 0; !t.equals(secondWord) && !complete; i++) {
+               ArrayList<String> values = new ArrayList<>(EditNeighbors.get(t));
+               int smallestDif = letterDifference(values.get(0), secondWord);
+               int smallestDifLoc = 0;
 
-            System.out.println("Value found");
+               System.out.println("Possible values: " + values);
+
+               for (int p = 0; p < values.size(); p++) {
+                   if (letterDifference(values.get(p), secondWord) < smallestDif) {
+                       smallestDif = letterDifference(values.get(p), secondWord);
+                       smallestDifLoc = p;
+                       System.out.println("New smallest Dif: " + smallestDif + " Loc: " + smallestDifLoc);
+                   }
+               }
+               t = values.get(smallestDifLoc);
+
+               for (int p = 0; p < path.size(); p++) {
+                   if (path.get(p).equals(t)) {
+                       complete = true;
+                   }
+               }
+
+               path.add(t);
+
+               System.out.println("New value: " + t);
+               System.out.println("Current path: " + path);
+           }
+
+
+           System.out.println("Path found");
+           System.out.println("Total time: " + (System.currentTimeMillis() - beginTime));
 
         } else {
-            throw new RuntimeException("One or more words not found");
+            throw new RuntimeException("Word and or path not found");
         }
     }
 }
