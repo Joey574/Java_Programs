@@ -88,16 +88,13 @@ Maintenance Log:
         for (int i = smallestTargetLengthLoc; i < words.size(); i++) {
 
            String x = words.get(i);
+           
            if (x.length() > firstWord.length() && x.length() > secondWord.length()) {
                break;
            }
 
             startTime = System.currentTimeMillis();
-            boolean examined = false;
-            int smallestDifFound = startDif;
-
-            ArrayList<String> neighbors = new ArrayList<String>();
-
+            
             /*
             System.out.println("startlengthdif: " + Math.abs(firstWord.length() - secondWord.length()));
             System.out.println("currentlengthdif: " + Math.abs(x.length() - secondWord.length()));
@@ -105,12 +102,13 @@ Maintenance Log:
             System.out.println("Startdif: " + startDif);
              */
 
-            if (Math.abs(firstWord.length() - secondWord.length()) >= Math.abs(x.length() - secondWord.length()) && letterDifference(x, secondWord) <= smallestDifFound) {
-                examined = true;
+            if (Math.abs(firstWord.length() - secondWord.length()) >= Math.abs(x.length() - secondWord.length()) && letterDifference(x, secondWord) <= startDif) {
+                
+                ArrayList<String> neighbors = new ArrayList<String>();
 
-                if (letterDifference(x, secondWord) < startDif) {
+                /*if (letterDifference(x, secondWord) < startDif) {
                     smallestDifFound = letterDifference(x, secondWord);
-                }
+                }*/
 
                 for (String temp : words) {
                     if (Math.abs(temp.length() - x.length()) < 2) {
@@ -119,11 +117,9 @@ Maintenance Log:
                         }
                     }
                 }
-            }
-            if (examined) {
-                System.out.println("Element added: " + x + " Value: " + neighbors);
                 EditNeighbors.put(x, neighbors);
             }
+                
 
             System.out.println(i + " Ms: " + (System.currentTimeMillis() - startTime));
         }
