@@ -4,8 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f12e8b23-4312-4ae3-9faf-a14d684514af" name="Changes" comment="1/24/23">
-      <change afterPath="$PROJECT_DIR$/dictionarySortedLength.txt" afterDir="false" />
+    <list default="true" id="f12e8b23-4312-4ae3-9faf-a14d684514af" name="Changes" comment="1/25/23">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Algorithms.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Algorithms.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GS14_01.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GS14_01.java" afterDir="false" />
@@ -365,7 +364,14 @@
       <option name="project" value="LOCAL" />
       <updated>1674579666926</updated>
     </task>
-    <option name="localTasksCounter" value="45" />
+    <task id="LOCAL-00045" summary="1/25/23">
+      <created>1674666048002</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1674666048002</updated>
+    </task>
+    <option name="localTasksCounter" value="46" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -391,7 +397,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="10/24/22" />
     <MESSAGE value="10/25/22" />
     <MESSAGE value="10/26/22" />
     <MESSAGE value="10/28/22" />
@@ -416,6 +421,7 @@
     <MESSAGE value="1/20/23" />
     <MESSAGE value="1/23/23" />
     <MESSAGE value="1/24/23" />
-    <option name="LAST_COMMIT_MESSAGE" value="1/24/23" />
+    <MESSAGE value="1/25/23" />
+    <option name="LAST_COMMIT_MESSAGE" value="1/25/23" />
   </component>
 </project>

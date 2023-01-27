@@ -29,7 +29,7 @@ public class Algorithms
         return out;
     }
 
-    public static int binarySearchFirstLength(LinkedList<String> in, String target) {
+    public static int binarySearchFirstLength(LinkedList<String> in, String target, int smallBuffer) {
         boolean complete = false;
 
         int out = -1;
@@ -52,7 +52,14 @@ public class Algorithms
             }
         }
 
-        for (int i = 0; in.get(out).length() == target.length(); out--) {}
+        while(in.get(out).length() == target.length() - smallBuffer) {
+            if (out > 30) {
+                out -= 30;
+            } else {
+                out--;
+            }
+        }
+        for (int i = 0; in.get(out).length() != target.length() - smallBuffer; out++) {}
 
         return out;
     }

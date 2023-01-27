@@ -8,6 +8,7 @@ public class GS14_01
 
 /*
 Author: Joey Soroka
+Helper: Jackson Heckert :)
 Problem:
 Purpose:
 Pseudocode:
@@ -70,17 +71,37 @@ Maintenance Log:
         System.out.print("Enter ending word: ");
         secondWord = r.nextLine();
 
-        int startDif = letterDifference(firstWord, secondWord);
+        int smallestDifFound = letterDifference(firstWord, secondWord);
         long beginTime = System.currentTimeMillis();
 
         int smallestTargetLengthLoc;
+        int smallestWordLength;
+        int biggestWordLength;
+
+        int smallBuffer = 0;
+        int bigBuffer = 0;
 
         long startTime = System.currentTimeMillis();
 
         if (firstWord.length() > secondWord.length()) {
-            smallestTargetLengthLoc = Algorithms.binarySearchFirstLength(words, secondWord);
+            smallestWordLength = secondWord.length();
+            biggestWordLength = firstWord.length();
+            if (smallestWordLength > 5) {
+                smallBuffer = smallestWordLength / 3;
+            }
+            smallestTargetLengthLoc = Algorithms.binarySearchFirstLength(words, secondWord, smallBuffer);
+
         } else {
-            smallestTargetLengthLoc = Algorithms.binarySearchFirstLength(words, firstWord);
+            smallestWordLength = firstWord.length();
+            biggestWordLength = secondWord.length();
+            if (smallestWordLength > 5) {
+                smallBuffer = smallestWordLength / 3;
+            }
+            smallestTargetLengthLoc = Algorithms.binarySearchFirstLength(words, firstWord, smallBuffer);
+        }
+
+        if (biggestWordLength > 7) {
+            bigBuffer = biggestWordLength / 3;
         }
 
         System.out.println("Binary search time Ms: " + (System.currentTimeMillis() - startTime));
@@ -89,26 +110,17 @@ Maintenance Log:
 
            String x = words.get(i);
            
-           if (x.length() > firstWord.length() && x.length() > secondWord.length()) {
+           if (x.length() > biggestWordLength + bigBuffer) {
                break;
            }
 
-            startTime = System.currentTimeMillis();
-            
-            /*
-            System.out.println("startlengthdif: " + Math.abs(firstWord.length() - secondWord.length()));
-            System.out.println("currentlengthdif: " + Math.abs(x.length() - secondWord.length()));
-            System.out.println("currentdif: " + letterDifference(x, secondWord));
-            System.out.println("Startdif: " + startDif);
-             */
-
-            if (Math.abs(firstWord.length() - secondWord.length()) >= Math.abs(x.length() - secondWord.length()) && letterDifference(x, secondWord) <= startDif) {
+            if (Math.abs(firstWord.length() - secondWord.length()) >= Math.abs(x.length() - secondWord.length()) && letterDifference(x, secondWord) <= smallestDifFound + smallestWordLength) {
                 
                 ArrayList<String> neighbors = new ArrayList<String>();
 
-                /*if (letterDifference(x, secondWord) < startDif) {
+                if (letterDifference(x, secondWord) < smallestDifFound) {
                     smallestDifFound = letterDifference(x, secondWord);
-                }*/
+                }
 
                 for (String temp : words) {
                     if (Math.abs(temp.length() - x.length()) < 2) {
@@ -119,9 +131,6 @@ Maintenance Log:
                 }
                 EditNeighbors.put(x, neighbors);
             }
-                
-
-            System.out.println(i + " Ms: " + (System.currentTimeMillis() - startTime));
         }
 
         System.out.println("Map size: " + EditNeighbors.size());
@@ -165,6 +174,14 @@ Maintenance Log:
            System.out.println("Total time: " + (System.currentTimeMillis() - beginTime));
 
         } else {
+
+            //for (int i = 0; i < EditNeighbors.size(); i++) {
+            //    LinkedList<String> keys = new LinkedList<>((EditNeighbors.keySet()));
+            //    ArrayList<String> vals = new ArrayList<>(EditNeighbors.get(keys.get(i)));
+            //    System.out.println("Key: " + keys.get(i) + " Values: " + vals);
+
+            //}
+
             throw new RuntimeException("Word and or path not found");
         }
     }
