@@ -124,6 +124,7 @@ Maintenance Log:
 
                 for (String temp : words) {
                     if (Math.abs(temp.length() - x.length()) < 2) {
+                        break;
                         if (isEditDistance(temp, x)) {
                             neighbors.add(temp);
                         }
