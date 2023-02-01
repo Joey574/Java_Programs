@@ -52,7 +52,7 @@ public class Algorithms
             }
         }
 
-        while(in.get(out).length() == target.length() - smallBuffer) {
+        while(in.get(out).length() >= target.length() - smallBuffer) {
             if (out > 30) {
                 out -= 30;
             } else {
