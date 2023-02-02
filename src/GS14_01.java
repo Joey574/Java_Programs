@@ -172,7 +172,7 @@ Maintenance Log:
            System.out.println("Total time to complete (ms): " + (System.currentTimeMillis() - beginTime));
 
         } else {
-            throw new RuntimeException("Word and or path not found");
+            throw new RuntimeException("Word not found in map and or dictionary");
         }
     }
 }
