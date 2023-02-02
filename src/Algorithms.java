@@ -59,7 +59,10 @@ public class Algorithms
                 out--;
             }
         }
-        for (int i = 0; in.get(out).length() != target.length() - smallBuffer; out++) {}
+
+        while(in.get(out).length() != target.length() - smallBuffer) {
+            out++;
+        }
 
         return out;
     }

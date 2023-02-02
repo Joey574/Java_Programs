@@ -71,11 +71,6 @@ Maintenance Log:
         for (int i = startLoc; words.get(i).length() <= word.length(); i++) {
             HashMap<Character, Integer> temp = mapValues(words.get(i));
             mapList.add(temp);
-            Collections.sort(mapList, new compareMaps());
-
-            if ( && !words.get(i).equals(word)) {
-                anagrams.add(words.get(i));
-            }
         }
         System.out.println(anagrams);
     }

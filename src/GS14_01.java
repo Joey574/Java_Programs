@@ -71,8 +71,9 @@ Maintenance Log:
         System.out.print("Enter ending word: ");
         secondWord = r.nextLine();
 
-        int smallestDifFound = letterDifference(firstWord, secondWord);
         long beginTime = System.currentTimeMillis();
+        int smallestDifFound = letterDifference(firstWord, secondWord);
+        int startDif = smallestDifFound;
 
         int smallestTargetLengthLoc;
         int smallestWordLength;
@@ -81,8 +82,6 @@ Maintenance Log:
         int smallBuffer = 0;
         int bigBuffer = 0;
 
-        long startTime = System.currentTimeMillis();
-
         if (firstWord.length() > secondWord.length()) {
             smallestWordLength = secondWord.length();
             biggestWordLength = firstWord.length();
@@ -90,7 +89,6 @@ Maintenance Log:
                 smallBuffer = smallestWordLength / 3;
             }
             smallestTargetLengthLoc = Algorithms.binarySearchFirstLength(words, secondWord, smallBuffer);
-
         } else {
             smallestWordLength = firstWord.length();
             biggestWordLength = secondWord.length();
@@ -104,7 +102,7 @@ Maintenance Log:
             bigBuffer = biggestWordLength / 3;
         }
 
-        System.out.println("Binary search time Ms: " + (System.currentTimeMillis() - startTime));
+        System.out.println("Binary search time (ms): " + (System.currentTimeMillis() - beginTime));
 
         for (int i = smallestTargetLengthLoc; i < words.size(); i++) {
 
@@ -114,7 +112,10 @@ Maintenance Log:
                break;
            }
 
-            if (Math.abs(firstWord.length() - secondWord.length()) >= Math.abs(x.length() - secondWord.length()) && letterDifference(x, secondWord) <= smallestDifFound + smallestWordLength) {
+           boolean a = letterDifference(x, secondWord) <= smallestDifFound + smallestWordLength;
+           boolean b = letterDifference(x, firstWord) <= startDif;
+
+            if (Math.abs(firstWord.length() - secondWord.length()) >= Math.abs(x.length() - secondWord.length()) && a || b) {
                 
                 ArrayList<String> neighbors = new ArrayList<String>();
 
@@ -127,7 +128,7 @@ Maintenance Log:
                         if (isEditDistance(temp, x)) {
                             neighbors.add(temp);
                         }
-                    } else {
+                    } else if (temp.length() > x.length()){
                         break;
                     }
                 }
@@ -136,11 +137,12 @@ Maintenance Log:
         }
 
         System.out.println("Map size: " + EditNeighbors.size());
-        System.out.println("Total Ms elapsed: " + (System.currentTimeMillis() - beginTime));
+        System.out.println("Total time elapsed to create map (ms): " + (System.currentTimeMillis() - beginTime));
 
         if (EditNeighbors.containsKey(firstWord) && EditNeighbors.containsKey(secondWord)) {
             String t = firstWord;
             boolean complete = false;
+            boolean found = false;
             ArrayList<String> path = new ArrayList<>(List.of(t));
 
            for (int i = 0; !t.equals(secondWord) && !complete; i++) {
@@ -148,42 +150,28 @@ Maintenance Log:
                int smallestDif = letterDifference(values.get(0), secondWord);
                int smallestDifLoc = 0;
 
-               System.out.println("Possible values: " + values);
-
                for (int p = 0; p < values.size(); p++) {
                    if (letterDifference(values.get(p), secondWord) < smallestDif) {
                        smallestDif = letterDifference(values.get(p), secondWord);
                        smallestDifLoc = p;
-                       System.out.println("New smallest Dif: " + smallestDif + " Loc: " + smallestDifLoc);
                    }
                }
+
                t = values.get(smallestDifLoc);
 
                for (int p = 0; p < path.size(); p++) {
                    if (path.get(p).equals(t)) {
                        complete = true;
+                       break;
                    }
                }
-
                path.add(t);
-
-               System.out.println("New value: " + t);
-               System.out.println("Current path: " + path);
            }
 
-
-           System.out.println("Path found");
-           System.out.println("Total time: " + (System.currentTimeMillis() - beginTime));
+           System.out.println("Path found: " + path);
+           System.out.println("Total time to complete (ms): " + (System.currentTimeMillis() - beginTime));
 
         } else {
-
-            //for (int i = 0; i < EditNeighbors.size(); i++) {
-            //    LinkedList<String> keys = new LinkedList<>((EditNeighbors.keySet()));
-            //    ArrayList<String> vals = new ArrayList<>(EditNeighbors.get(keys.get(i)));
-            //    System.out.println("Key: " + keys.get(i) + " Values: " + vals);
-
-            //}
-
             throw new RuntimeException("Word and or path not found");
         }
     }
