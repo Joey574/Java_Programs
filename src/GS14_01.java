@@ -140,58 +140,6 @@ Maintenance Log:
         System.out.println("Total time elapsed to create map (ms): " + (System.currentTimeMillis() - beginTime));
 
         if (EditNeighbors.containsKey(firstWord) && EditNeighbors.containsKey(secondWord)) {
-            String t = firstWord;
-            String topElement = "";
-            boolean complete = false;
-            ArrayList<String> path = new ArrayList<>(List.of(t));
-            ArrayList<String> examined = new ArrayList<String>();
-
-            for (int i = 0; !t.equals(secondWord); i++) {
-               ArrayList<String> values = new ArrayList<>(EditNeighbors.get(t));
-               System.out.println(values);
-               System.out.println(values.size());
-
-               if (t.equals(firstWord) && Algorithms.containsArray(values, examined)) {
-                   complete = true;
-                   break;
-               }
-
-               if (values.size() > 0) {
-                   int smallestDif = letterDifference(values.get(0), secondWord);
-                   int smallestDifLoc = 0;
-                   int temp = 0;
-
-                   for (int p = 0; p < values.size(); p++) {
-                       if (letterDifference(values.get(p), secondWord) < smallestDif && !Algorithms.containsString(values.get(p), examined) && !values.get(p).equals(topElement)) {
-                           smallestDif = letterDifference(values.get(p), secondWord);
-                           smallestDifLoc = p;
-                           temp++;
-                       }
-                   }
-
-                   if (temp == 0) {
-                       examined.add(t);
-                       t = topElement;
-                   } else {
-                       topElement = t;
-                       t = values.get(smallestDifLoc);
-                       path.add(t);
-                   }
-
-               } else {
-                   examined.add(t);
-               }
-
-
-
-           }
-
-            if (!complete) {
-                System.out.println("Path found: " + path);
-            } else {
-                System.out.println("No path found" + path);
-            }
-            System.out.println("Total time to complete (ms): " + (System.currentTimeMillis() - beginTime));
 
         } else {
             throw new RuntimeException("Word not found in map and or dictionary");

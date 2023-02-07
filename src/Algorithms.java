@@ -69,8 +69,8 @@ public class Algorithms
     }
 
     public static boolean containsString(String in, List<String> in2) {
-        for (String i : in2) {
-            if (i.equals(in)) {
+        for (String s : in2) {
+            if (in.equals(s)) {
                 return true;
             }
         }
