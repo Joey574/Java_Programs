@@ -137,9 +137,91 @@ Maintenance Log:
         }
 
         System.out.println("Map size: " + EditNeighbors.size());
-        System.out.println("Total time elapsed to create map (ms): " + (System.currentTimeMillis() - beginTime));
+        long mapTime = (System.currentTimeMillis() - beginTime);
+        System.out.println("Total time elapsed to create map (ms): " + mapTime);
 
         if (EditNeighbors.containsKey(firstWord) && EditNeighbors.containsKey(secondWord)) {
+            ArrayList<String> path = new ArrayList<String>();
+            ArrayList<String> examined = new ArrayList<String>();
+            String target = firstWord;
+            boolean complete = false;
+            int temp = 0;
+
+            for (int i = 0; !target.equals(secondWord) && !complete; i++) {
+                ArrayList<String> values = new ArrayList<String>(EditNeighbors.get(target));
+                int smallestDif = letterDifference(target, secondWord);
+                int smallestDifLoc = -1;
+                temp = -1;
+                path.add(target);
+
+                for (int u = 0; u < values.size(); u++) {
+                    if (!Algorithms.containsString(values.get(u), path) && !Algorithms.containsString(values.get(u), examined)) {
+                        temp = 1;
+                        break;
+                    }
+                }
+
+                if (temp == -1) {
+                    examined.add(target);
+                    if (path.size() < 2) {
+                        complete = true;
+                    } else {
+                        target = path.get(path.size() - 2);
+                        path.remove(path.size() - 1);
+                        continue;
+                    }
+                }
+
+                for (int x = 0; x < values.size(); x++) {
+                    if (letterDifference(values.get(x), secondWord) < smallestDif && !Algorithms.containsString(values.get(x), path) && !Algorithms.containsString(values.get(x), examined)) {
+                        smallestDif = letterDifference(values.get(x), secondWord);
+                        smallestDifLoc = x;
+                    }
+                }
+
+                if (smallestDifLoc == -1) {
+                    for (int y = 0; y < values.size(); y++) {
+                        if (!Algorithms.containsString(values.get(y), path) && !Algorithms.containsString(values.get(y), examined)) {
+                            smallestDif = letterDifference(values.get(y), secondWord);
+                            smallestDifLoc = y;
+                        }
+                    }
+
+                    if (smallestDifLoc == -1) {
+                        examined.add(target);
+                        if (path.size() < 2) {
+                            complete = true;
+                        } else {
+                            target = path.get(path.size() - 2);
+                            path.remove(path.size() - 1);
+                        }
+                    } else {
+                        for (int q = 0; q < values.size(); q++) {
+                            if (letterDifference(values.get(q), secondWord) < smallestDif && !Algorithms.containsString(values.get(q), path) && !Algorithms.containsString(values.get(q), examined)) {
+                                smallestDif = letterDifference(values.get(q), secondWord);
+                                smallestDifLoc = q;
+                            }
+                        }
+                    }
+                }
+
+                if (smallestDifLoc != -1) {
+                    target = values.get(smallestDifLoc);
+                    System.out.println("Target: " + target);
+                    if (target.equals(secondWord)) {
+                        path.add(target);
+                    }
+                }
+            }
+
+            if (!complete) {
+                System.out.println("Path found: " + path);
+            } else {
+                System.out.println("No path found: " + path);
+            }
+
+            System.out.println("Total time elapsed to find path (ms): " + (System.currentTimeMillis() - mapTime));
+            System.out.println("Total time elapsed (ms): " + (System.currentTimeMillis() - beginTime));
 
         } else {
             throw new RuntimeException("Word not found in map and or dictionary");
