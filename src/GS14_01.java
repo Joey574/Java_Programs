@@ -3,6 +3,37 @@ import java.io.IOException;
 import java.util.*;
 
 
+
+class mapThread implements Runnable {
+    private String threadName;
+    private int threadNum;
+    private Thread t;
+
+    mapThread(String name, int num) {
+        threadName = name;
+        threadNum = num;
+        System.out.println("Creating" + threadName);
+    }
+
+    public void run() {
+        System.out.println("Running " + threadName);
+        try {
+
+        } catch (InterruptedException e) {
+            System.out.println("Thread " + threadName + " error");
+        }
+        System.out.println("Thread " + threadName + " complete");
+    }
+
+    public void start() {
+        System.out.println("Starting " + threadName);
+        if (t == null) {
+            t = new Thread(this, threadName);
+            t.start();
+        }
+    }
+}
+
 public class GS14_01
 {
 
@@ -137,12 +168,12 @@ Maintenance Log:
         }
 
         System.out.println("Map size: " + EditNeighbors.size());
-        long mapTime = (System.currentTimeMillis() - beginTime);
-        System.out.println("Total time elapsed to create map (ms): " + mapTime);
+        long mapTime = System.currentTimeMillis();
+        System.out.println("Total time elapsed to create map (ms): " + (System.currentTimeMillis() - beginTime));
 
         if (EditNeighbors.containsKey(firstWord) && EditNeighbors.containsKey(secondWord)) {
             ArrayList<String> path = new ArrayList<String>();
-            ArrayList<String> examined = new ArrayList<String>();
+            Set<String> examined = new HashSet<String>();
             String target = firstWord;
             boolean complete = false;
             int temp = 0;
@@ -154,26 +185,31 @@ Maintenance Log:
                 temp = -1;
                 path.add(target);
 
-                for (int u = 0; u < values.size(); u++) {
-                    if (!Algorithms.containsString(values.get(u), path) && !Algorithms.containsString(values.get(u), examined)) {
+                for (String value : values) {
+                    if (!Algorithms.containsString(value, path) && !examined.contains(value)) {
                         temp = 1;
                         break;
                     }
                 }
+
+                System.out.println("Examined: " + examined);
+                System.out.println("Path: " + path);
+                System.out.println("Target: " + target);
 
                 if (temp == -1) {
                     examined.add(target);
                     if (path.size() < 2) {
                         complete = true;
                     } else {
-                        target = path.get(path.size() - 2);
-                        path.remove(path.size() - 1);
+                        String finalTarget = target;
+                        path.removeIf(finalTarget::equals);
+                        target = path.get(path.size() - 1);
                         continue;
                     }
                 }
 
                 for (int x = 0; x < values.size(); x++) {
-                    if (letterDifference(values.get(x), secondWord) < smallestDif && !Algorithms.containsString(values.get(x), path) && !Algorithms.containsString(values.get(x), examined)) {
+                    if (letterDifference(values.get(x), secondWord) < smallestDif && !Algorithms.containsString(values.get(x), path) && !examined.contains(values.get(x))) {
                         smallestDif = letterDifference(values.get(x), secondWord);
                         smallestDifLoc = x;
                     }
@@ -181,7 +217,7 @@ Maintenance Log:
 
                 if (smallestDifLoc == -1) {
                     for (int y = 0; y < values.size(); y++) {
-                        if (!Algorithms.containsString(values.get(y), path) && !Algorithms.containsString(values.get(y), examined)) {
+                        if (!Algorithms.containsString(values.get(y), path) && !examined.contains(values.get(y))) {
                             smallestDif = letterDifference(values.get(y), secondWord);
                             smallestDifLoc = y;
                         }
@@ -197,7 +233,7 @@ Maintenance Log:
                         }
                     } else {
                         for (int q = 0; q < values.size(); q++) {
-                            if (letterDifference(values.get(q), secondWord) < smallestDif && !Algorithms.containsString(values.get(q), path) && !Algorithms.containsString(values.get(q), examined)) {
+                            if (letterDifference(values.get(q), secondWord) < smallestDif && !Algorithms.containsString(values.get(q), path) && !examined.contains(values.get(q))) {
                                 smallestDif = letterDifference(values.get(q), secondWord);
                                 smallestDifLoc = q;
                             }
@@ -207,7 +243,6 @@ Maintenance Log:
 
                 if (smallestDifLoc != -1) {
                     target = values.get(smallestDifLoc);
-                    System.out.println("Target: " + target);
                     if (target.equals(secondWord)) {
                         path.add(target);
                     }
