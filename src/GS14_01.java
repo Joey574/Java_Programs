@@ -2,8 +2,25 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
+public class GS14_01
+{
 
-
+/*
+Author: Joey Soroka
+Helper: Jackson Heckert :)
+Problem:
+Purpose:
+Pseudocode:
+Maintenance Log:
+ */
+    
+String firstWord;
+String secondWord;
+LinkedList<String> words = new LinkedList<>();    
+HashMap<String, List<String>> EditNeighbors = new HashMap<String, List<String>>();
+    
+  
+    
 class mapThread implements Runnable {
     private String threadName;
     private int threadNum;
@@ -33,19 +50,6 @@ class mapThread implements Runnable {
         }
     }
 }
-
-public class GS14_01
-{
-
-/*
-Author: Joey Soroka
-Helper: Jackson Heckert :)
-Problem:
-Purpose:
-Pseudocode:
-Maintenance Log:
- */
-
 
 
     public static boolean isEditDistance (String in1, String in2) {
@@ -80,8 +84,6 @@ Maintenance Log:
         FileReader fr = new FileReader(fileName);
         Scanner lineScanner = new Scanner(fr);
 
-        LinkedList<String> words = new LinkedList<>();
-
         while (lineScanner.hasNextLine())
         {
             words.add(lineScanner.nextLine());
@@ -89,12 +91,7 @@ Maintenance Log:
 
         fr.close();
         System.out.println("File closed");
-        
-        String firstWord;
-        String secondWord;
-
-        HashMap<String, List<String>> EditNeighbors = new HashMap<String, List<String>>();
-
+       
         Scanner r = new Scanner(System.in);
 
         System.out.print("Enter starting word: ");
