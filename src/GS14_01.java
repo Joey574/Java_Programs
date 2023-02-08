@@ -16,6 +16,7 @@ Maintenance Log:
     
 String firstWord;
 String secondWord;
+long beginTime;
 LinkedList<String> words = new LinkedList<>();    
 HashMap<String, List<String>> EditNeighbors = new HashMap<String, List<String>>();
     
@@ -99,36 +100,33 @@ class mapThread implements Runnable {
         System.out.print("Enter ending word: ");
         secondWord = r.nextLine();
 
-        long beginTime = System.currentTimeMillis();
+        beginTime = System.currentTimeMillis();
         int smallestDifFound = letterDifference(firstWord, secondWord);
         int startDif = smallestDifFound;
 
         int smallestTargetLengthLoc;
-        int smallestWordLength;
-        int biggestWordLength;
+        int smallestWord;
+        int biggestWord;
 
         int smallBuffer = 0;
         int bigBuffer = 0;
 
         if (firstWord.length() > secondWord.length()) {
-            smallestWordLength = secondWord.length();
-            biggestWordLength = firstWord.length();
-            if (smallestWordLength > 5) {
-                smallBuffer = smallestWordLength / 3;
-            }
-            smallestTargetLengthLoc = Algorithms.binarySearchFirstLength(words, secondWord, smallBuffer);
+            smallestWord = secondWord;
+            biggestWord = firstWord;
+          
         } else {
             smallestWordLength = firstWord.length();
             biggestWordLength = secondWord.length();
-            if (smallestWordLength > 5) {
-                smallBuffer = smallestWordLength / 3;
-            }
-            smallestTargetLengthLoc = Algorithms.binarySearchFirstLength(words, firstWord, smallBuffer);
+           
         }
-
+        if (smallestWordLength > 5) {
+            smallBuffer = smallestWordLength / 3;
+        }        
         if (biggestWordLength > 7) {
             bigBuffer = biggestWordLength / 3;
         }
+        smallestTargetLengthLoc = Algorithms.binarySearchFirstLength(words, smallestWord, smallBuffer);
 
         System.out.println("Binary search time (ms): " + (System.currentTimeMillis() - beginTime));
 
