@@ -16,7 +16,9 @@ Pseudocode:
 Maintenance Log:
  */
 
-    static int threadNum = 6;
+    static boolean tOneComplete = false;
+    static boolean tZeroComplete = false;
+    static int threadNum = 12;
     static int threadsComplete = 0;
     static int smallBuffer = 0;
     static int bigBuffer = 0;
@@ -53,14 +55,29 @@ Maintenance Log:
         return t;
     }
 
+public static class sync {
+    static private int mapTarget = 0;
+
+    static int getTarget() {
+        mapTarget++;
+        return mapTarget - 1;
+    }
+
+    static void setMapTarget(int i) {
+        mapTarget = i;
+    }
+}
+
 static class mapThread implements Runnable {
     private final String threadName;
     private final int threadID;
     private Thread t;
+    final sync obj;
 
-    mapThread(String name, int num) {
+    mapThread(String name, int num, sync o) {
         threadName = name;
         threadID = num;
+        obj = o;
     }
 
     public void run() {
@@ -68,13 +85,31 @@ static class mapThread implements Runnable {
         try {
             int smallestDifFound = letterDifference(firstWord, secondWord);
             int startDif = smallestDifFound;
+            int target;
+            long time = System.currentTimeMillis();
 
-            int endPoint = ((largestTargetLengthLoc - smallestTargetLengthLoc) / threadNum * (threadID + 1)) + smallestTargetLengthLoc;
-            int startPoint = endPoint - ((largestTargetLengthLoc - smallestTargetLengthLoc) / threadNum);
+            if (threadID == 0) {
+                smallestTargetLengthLoc = Algorithms.binarySearchFirstLength(words, smallestWord, smallBuffer);
+                obj.setMapTarget(smallestTargetLengthLoc);
+                tZeroComplete = true;
+                System.out.println(threadName + " binary search time (ms): " + (System.currentTimeMillis() - time));
+            } else if (threadID == 1) {
+                largestTargetLengthLoc = Algorithms.binarySearchLastLength(words, biggestWord, bigBuffer);
+                tOneComplete = true;
+                System.out.println(threadName + " binary search time (ms): " + (System.currentTimeMillis() - time));
+            } else {
+                while (!tOneComplete && !tZeroComplete) {
+                    sleep(1);
+                }
+            }
 
-            for (int i = startPoint; i < endPoint; i++) {
+            for (int i = 0; i <= words.size(); i++) {
 
-                String x = words.get(i);
+                synchronized (obj) {
+                    target = obj.getTarget();
+                }
+
+                String x = words.get(target);
 
                 if (x.length() > biggestWord.length() + bigBuffer) {
                     break;
@@ -83,25 +118,22 @@ static class mapThread implements Runnable {
                 boolean a = letterDifference(x, secondWord) <= smallestDifFound + smallestWord.length();
                 boolean b = letterDifference(x, firstWord) <= startDif;
 
-                if (Math.abs(firstWord.length() - secondWord.length()) >= Math.abs(x.length() - secondWord.length()) && a || b) {
+                ArrayList<String> neighbors = new ArrayList<String>();
 
-                    ArrayList<String> neighbors = new ArrayList<String>();
-
-                    if (letterDifference(x, secondWord) < smallestDifFound) {
-                        smallestDifFound = letterDifference(x, secondWord);
-                    }
-
-                    for (String temp : words) {
-                        if (Math.abs(temp.length() - x.length()) < 2) {
-                            if (isEditDistance(temp, x)) {
-                                neighbors.add(temp);
-                            }
-                        } else if (temp.length() > x.length()){
-                            break;
-                        }
-                    }
-                    EditNeighbors.put(x, neighbors);
+                if (letterDifference(x, secondWord) < smallestDifFound) {
+                    smallestDifFound = letterDifference(x, secondWord);
                 }
+
+                for (String temp : words) {
+                    if (Math.abs(temp.length() - x.length()) < 2) {
+                        if (isEditDistance(temp, x)) {
+                            neighbors.add(temp);
+                        }
+                    } else if (temp.length() > x.length()){
+                        break;
+                    }
+                }
+                EditNeighbors.put(x, neighbors);
             }
 
             System.out.println(threadName + " total time elapsed to create map (ms): " + (System.currentTimeMillis() - beginTime));
@@ -161,12 +193,11 @@ static class mapThread implements Runnable {
             bigBuffer = biggestWord.length() / 3;
         }
 
-        smallestTargetLengthLoc = Algorithms.binarySearchFirstLength(words, smallestWord, smallBuffer);
-        largestTargetLengthLoc = Algorithms.binarySearchLastLength(words, biggestWord, bigBuffer);
+        sync o = new sync();
 
         for (int i = 0; i < threadNum; i++) {
             String name = "Thread " + i;
-            mapThread temp = new mapThread(name, i);
+            mapThread temp = new mapThread(name, i, o);
             temp.start();
         }
         while(threadsComplete != threadNum) {
@@ -190,58 +221,31 @@ static class mapThread implements Runnable {
                 path.add(target);
 
                 for (String value : values) {
-                    if (!Algorithms.containsString(value, path) && !examined.contains(value)) {
+                    if (!Algorithms.containsString(value, path) && !examined.contains(value) && EditNeighbors.containsKey(value)) {
                         temp = 1;
                         break;
                     }
                 }
-
-                System.out.println("Examined: " + examined);
-                System.out.println("Path: " + path);
-                System.out.println("Target: " + target);
 
                 if (temp == -1) {
                     examined.add(target);
                     if (path.size() < 2) {
                         complete = true;
                     } else {
-                        String finalTarget = target;
-                        path.removeIf(finalTarget::equals);
+                        path.remove(path.size() - 1);
                         target = path.get(path.size() - 1);
-                        continue;
                     }
                 }
+
+                System.out.println("Examined: " + examined);
+                System.out.println("Path: " + path);
+                System.out.println("Target: " + target);
+                System.out.println("Values: " + values);
 
                 for (int x = 0; x < values.size(); x++) {
-                    if (letterDifference(values.get(x), secondWord) < smallestDif && !Algorithms.containsString(values.get(x), path) && !examined.contains(values.get(x))) {
+                    if (letterDifference(values.get(x), secondWord) < smallestDif && !Algorithms.containsString(values.get(x), path) && !examined.contains(values.get(x)) && EditNeighbors.containsKey(values.get(x))) {
                         smallestDif = letterDifference(values.get(x), secondWord);
                         smallestDifLoc = x;
-                    }
-                }
-
-                if (smallestDifLoc == -1) {
-                    for (int y = 0; y < values.size(); y++) {
-                        if (!Algorithms.containsString(values.get(y), path) && !examined.contains(values.get(y))) {
-                            smallestDif = letterDifference(values.get(y), secondWord);
-                            smallestDifLoc = y;
-                        }
-                    }
-
-                    if (smallestDifLoc == -1) {
-                        examined.add(target);
-                        if (path.size() < 2) {
-                            complete = true;
-                        } else {
-                            target = path.get(path.size() - 2);
-                            path.remove(path.size() - 1);
-                        }
-                    } else {
-                        for (int q = 0; q < values.size(); q++) {
-                            if (letterDifference(values.get(q), secondWord) < smallestDif && !Algorithms.containsString(values.get(q), path) && !examined.contains(values.get(q))) {
-                                smallestDif = letterDifference(values.get(q), secondWord);
-                                smallestDifLoc = q;
-                            }
-                        }
                     }
                 }
 
@@ -250,6 +254,21 @@ static class mapThread implements Runnable {
                     if (target.equals(secondWord)) {
                         path.add(target);
                     }
+                } else {
+                    for (String value : values) {
+                        if (!Algorithms.containsString(value, path) && !examined.contains(value) && EditNeighbors.containsKey(value)) {
+                            target = value;
+                            if (target.equals(secondWord)) {
+                                path.add(target);
+                            }
+                        }
+                    }
+                }
+                System.out.println("New target: " + target);
+                if (EditNeighbors.containsKey(target)) {
+                    System.out.println("contains new target");
+                } else {
+                    System.out.println("does not contain new target");
                 }
             }
 
