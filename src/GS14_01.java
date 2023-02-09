@@ -18,11 +18,9 @@ Maintenance Log:
     
     static int THREAD_NUM = 12;
 
-    static boolean tZeroComplete = false;
     static int threadsComplete = 0;
     static int smallBuffer = 0;
     static int bigBuffer = 0;
-    static int smallestTargetLengthLoc;
     static long beginTime;
     static String firstWord;
     static String secondWord;
@@ -85,18 +83,6 @@ static class mapThread implements Runnable {
             int smallestDifFound = letterDifference(firstWord, secondWord);
             int startDif = smallestDifFound;
             int target;
-            long time = System.currentTimeMillis();
-
-            if (threadID == 0) {
-                smallestTargetLengthLoc = Algorithms.binarySearchFirstLength(words, smallestWord, smallBuffer);
-                obj.setMapTarget(smallestTargetLengthLoc);
-                tZeroComplete = true;
-                System.out.println(threadName + " binary search time (ms): " + (System.currentTimeMillis() - time));
-            } else {
-                while (!tZeroComplete) {
-                    sleep(1);
-                }
-            }
 
             for (int i = 0; i <= words.size(); i++) {
 
@@ -186,9 +172,13 @@ static class mapThread implements Runnable {
         }        
         if (biggestWord.length() > 7) {
             bigBuffer = biggestWord.length() / 3;
-        }
+        }     
 
         sync o = new sync();
+        
+        int smallestTargetLengthLoc = Algorithms.binarySearchFirstLength(words, smallestWord, smallBuffer);
+        o.setMapTarget(smallestTargetLengthLoc);
+        System.out.println(threadName + " binary search time (ms): " + (System.currentTimeMillis() - beginTime));
 
         for (int i = 0; i < THREAD_NUM; i++) {
             String name = "Thread " + i + ": ";
