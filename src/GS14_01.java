@@ -2,6 +2,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
+import static java.lang.Thread.sleep;
+
 public class GS14_01
 {
 
@@ -13,45 +15,20 @@ Purpose:
 Pseudocode:
 Maintenance Log:
  */
-    
-String firstWord;
-String secondWord;
-long beginTime;
-LinkedList<String> words = new LinkedList<>();    
-HashMap<String, List<String>> EditNeighbors = new HashMap<String, List<String>>();
-    
-  
-    
-class mapThread implements Runnable {
-    private String threadName;
-    private int threadNum;
-    private Thread t;
 
-    mapThread(String name, int num) {
-        threadName = name;
-        threadNum = num;
-        System.out.println("Creating" + threadName);
-    }
-
-    public void run() {
-        System.out.println("Running " + threadName);
-        try {
-
-        } catch (InterruptedException e) {
-            System.out.println("Thread " + threadName + " error");
-        }
-        System.out.println("Thread " + threadName + " complete");
-    }
-
-    public void start() {
-        System.out.println("Starting " + threadName);
-        if (t == null) {
-            t = new Thread(this, threadName);
-            t.start();
-        }
-    }
-}
-
+    static int threadNum = 6;
+    static int threadsComplete = 0;
+    static int smallBuffer = 0;
+    static int bigBuffer = 0;
+    static int smallestTargetLengthLoc;
+    static int largestTargetLengthLoc;
+    static long beginTime;
+    static String firstWord;
+    static String secondWord;
+    static String smallestWord;
+    static String biggestWord;
+    static LinkedList<String> words = new LinkedList<>();
+    static HashMap<String, List<String>> EditNeighbors = new HashMap<String, List<String>>();
 
     public static boolean isEditDistance (String in1, String in2) {
         return letterDifference(in1, in2) < 2 && !in1.equals(in2);
@@ -76,8 +53,74 @@ class mapThread implements Runnable {
         return t;
     }
 
+static class mapThread implements Runnable {
+    private final String threadName;
+    private final int threadID;
+    private Thread t;
 
-    public static void main(String[] args) throws IOException {
+    mapThread(String name, int num) {
+        threadName = name;
+        threadID = num;
+    }
+
+    public void run() {
+        System.out.println("Running " + threadName);
+        try {
+            int smallestDifFound = letterDifference(firstWord, secondWord);
+            int startDif = smallestDifFound;
+
+            int endPoint = ((largestTargetLengthLoc - smallestTargetLengthLoc) / threadNum * (threadID + 1)) + smallestTargetLengthLoc;
+            int startPoint = endPoint - ((largestTargetLengthLoc - smallestTargetLengthLoc) / threadNum);
+
+            for (int i = startPoint; i < endPoint; i++) {
+
+                String x = words.get(i);
+
+                if (x.length() > biggestWord.length() + bigBuffer) {
+                    break;
+                }
+
+                boolean a = letterDifference(x, secondWord) <= smallestDifFound + smallestWord.length();
+                boolean b = letterDifference(x, firstWord) <= startDif;
+
+                if (Math.abs(firstWord.length() - secondWord.length()) >= Math.abs(x.length() - secondWord.length()) && a || b) {
+
+                    ArrayList<String> neighbors = new ArrayList<String>();
+
+                    if (letterDifference(x, secondWord) < smallestDifFound) {
+                        smallestDifFound = letterDifference(x, secondWord);
+                    }
+
+                    for (String temp : words) {
+                        if (Math.abs(temp.length() - x.length()) < 2) {
+                            if (isEditDistance(temp, x)) {
+                                neighbors.add(temp);
+                            }
+                        } else if (temp.length() > x.length()){
+                            break;
+                        }
+                    }
+                    EditNeighbors.put(x, neighbors);
+                }
+            }
+
+            System.out.println(threadName + " total time elapsed to create map (ms): " + (System.currentTimeMillis() - beginTime));
+        } catch (Exception e) {
+            System.out.println(threadName + " error");
+        }
+        System.out.println(threadName + " complete");
+        threadsComplete++;
+    }
+
+    public void start() {
+        if (t == null) {
+            t = new Thread(this, threadName);
+            t.start();
+        }
+    }
+}
+
+    public static void main(String[] args) throws IOException, InterruptedException {
         //String fileName = "dictionarySorted.txt";
         //String fileName = "dictionaryCatDog.txt";
         String fileName = "dictionarySortedLength.txt";
@@ -101,70 +144,36 @@ class mapThread implements Runnable {
         secondWord = r.nextLine();
 
         beginTime = System.currentTimeMillis();
-        int smallestDifFound = letterDifference(firstWord, secondWord);
-        int startDif = smallestDifFound;
-
-        int smallestTargetLengthLoc;
-        int smallestWord;
-        int biggestWord;
-
-        int smallBuffer = 0;
-        int bigBuffer = 0;
 
         if (firstWord.length() > secondWord.length()) {
             smallestWord = secondWord;
             biggestWord = firstWord;
           
         } else {
-            smallestWordLength = firstWord.length();
-            biggestWordLength = secondWord.length();
+            smallestWord = firstWord;
+            biggestWord = secondWord;
            
         }
-        if (smallestWordLength > 5) {
-            smallBuffer = smallestWordLength / 3;
+        if (smallestWord.length() > 5) {
+            smallBuffer = smallestWord.length() / 3;
         }        
-        if (biggestWordLength > 7) {
-            bigBuffer = biggestWordLength / 3;
+        if (biggestWord.length() > 7) {
+            bigBuffer = biggestWord.length() / 3;
         }
+
         smallestTargetLengthLoc = Algorithms.binarySearchFirstLength(words, smallestWord, smallBuffer);
+        largestTargetLengthLoc = Algorithms.binarySearchLastLength(words, biggestWord, bigBuffer);
 
-        System.out.println("Binary search time (ms): " + (System.currentTimeMillis() - beginTime));
-
-        for (int i = smallestTargetLengthLoc; i < words.size(); i++) {
-
-           String x = words.get(i);
-           
-           if (x.length() > biggestWordLength + bigBuffer) {
-               break;
-           }
-
-           boolean a = letterDifference(x, secondWord) <= smallestDifFound + smallestWordLength;
-           boolean b = letterDifference(x, firstWord) <= startDif;
-
-            if (Math.abs(firstWord.length() - secondWord.length()) >= Math.abs(x.length() - secondWord.length()) && a || b) {
-                
-                ArrayList<String> neighbors = new ArrayList<String>();
-
-                if (letterDifference(x, secondWord) < smallestDifFound) {
-                    smallestDifFound = letterDifference(x, secondWord);
-                }
-
-                for (String temp : words) {
-                    if (Math.abs(temp.length() - x.length()) < 2) {
-                        if (isEditDistance(temp, x)) {
-                            neighbors.add(temp);
-                        }
-                    } else if (temp.length() > x.length()){
-                        break;
-                    }
-                }
-                EditNeighbors.put(x, neighbors);
-            }
+        for (int i = 0; i < threadNum; i++) {
+            String name = "Thread " + i;
+            mapThread temp = new mapThread(name, i);
+            temp.start();
         }
-
+        while(threadsComplete != threadNum) {
+            sleep(1);
+        }
+        long threadTime = System.currentTimeMillis();
         System.out.println("Map size: " + EditNeighbors.size());
-        long mapTime = System.currentTimeMillis();
-        System.out.println("Total time elapsed to create map (ms): " + (System.currentTimeMillis() - beginTime));
 
         if (EditNeighbors.containsKey(firstWord) && EditNeighbors.containsKey(secondWord)) {
             ArrayList<String> path = new ArrayList<String>();
@@ -250,7 +259,7 @@ class mapThread implements Runnable {
                 System.out.println("No path found: " + path);
             }
 
-            System.out.println("Total time elapsed to find path (ms): " + (System.currentTimeMillis() - mapTime));
+            System.out.println("Total time elapsed to find path (ms): " + (System.currentTimeMillis() - threadTime));
             System.out.println("Total time elapsed (ms): " + (System.currentTimeMillis() - beginTime));
 
         } else {

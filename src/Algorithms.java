@@ -53,16 +53,54 @@ public class Algorithms
             }
         }
 
-        while(in.get(out).length() >= target.length() - smallBuffer) {
-            if (out > 30) {
-                out -= 30;
-            } else {
-                out--;
+            while(in.get(out).length() >= target.length() - smallBuffer) {
+                if (out > 30) {
+                    out -= 30;
+                } else {
+                    out--;
+                }
+            }
+
+            while(in.get(out).length() != target.length() - smallBuffer) {
+                out++;
+            }
+
+        return out;
+    }
+
+    public static int binarySearchLastLength(LinkedList<String> in, String target, int smallBuffer) {
+        boolean complete = false;
+
+        int out = -1;
+        int start = 0;
+        int end = in.size();
+
+        for (int i = 0; !complete; i++) {
+            int loc = (start + end) / 2;
+            if (in.get(loc).length() == target.length()) {
+                complete = true;
+                out = loc;
+            } else if (in.get(loc).length() > target.length()) {
+                end = loc;
+            } else if (in.get(loc).length() < target.length()) {
+                start = loc;
+            }
+            if (start > end || start == end) {
+                complete = true;
+                out = -loc;
             }
         }
 
-        while(in.get(out).length() != target.length() - smallBuffer) {
-            out++;
+        while(in.get(out).length() <= target.length() + smallBuffer) {
+            if (in.size() - out > 30) {
+                out += 30;
+            } else {
+                out++;
+            }
+        }
+
+        while(in.get(out).length() != target.length() + smallBuffer) {
+            out--;
         }
 
         return out;
