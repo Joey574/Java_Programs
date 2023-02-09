@@ -15,15 +15,14 @@ Purpose:
 Pseudocode:
 Maintenance Log:
  */
+    
+    static int THREAD_NUM = 12;
 
-    static boolean tOneComplete = false;
     static boolean tZeroComplete = false;
-    static int threadNum = 12;
     static int threadsComplete = 0;
     static int smallBuffer = 0;
     static int bigBuffer = 0;
     static int smallestTargetLengthLoc;
-    static int largestTargetLengthLoc;
     static long beginTime;
     static String firstWord;
     static String secondWord;
@@ -93,12 +92,8 @@ static class mapThread implements Runnable {
                 obj.setMapTarget(smallestTargetLengthLoc);
                 tZeroComplete = true;
                 System.out.println(threadName + " binary search time (ms): " + (System.currentTimeMillis() - time));
-            } else if (threadID == 1) {
-                largestTargetLengthLoc = Algorithms.binarySearchLastLength(words, biggestWord, bigBuffer);
-                tOneComplete = true;
-                System.out.println(threadName + " binary search time (ms): " + (System.currentTimeMillis() - time));
             } else {
-                while (!tOneComplete && !tZeroComplete) {
+                while (!tZeroComplete) {
                     sleep(1);
                 }
             }
@@ -195,17 +190,18 @@ static class mapThread implements Runnable {
 
         sync o = new sync();
 
-        for (int i = 0; i < threadNum; i++) {
-            String name = "Thread " + i;
+        for (int i = 0; i < THREAD_NUM; i++) {
+            String name = "Thread " + i + ": ";
             mapThread temp = new mapThread(name, i, o);
             temp.start();
         }
         while(threadsComplete != threadNum) {
             sleep(1);
         }
-        long threadTime = System.currentTimeMillis();
         System.out.println("Map size: " + EditNeighbors.size());
-
+        
+        long pathTime = System.currentTimeMillis();
+        
         if (EditNeighbors.containsKey(firstWord) && EditNeighbors.containsKey(secondWord)) {
             ArrayList<String> path = new ArrayList<String>();
             Set<String> examined = new HashSet<String>();
@@ -278,7 +274,7 @@ static class mapThread implements Runnable {
                 System.out.println("No path found: " + path);
             }
 
-            System.out.println("Total time elapsed to find path (ms): " + (System.currentTimeMillis() - threadTime));
+            System.out.println("Total time elapsed to find path (ms): " + (System.currentTimeMillis() - pathTime));
             System.out.println("Total time elapsed (ms): " + (System.currentTimeMillis() - beginTime));
 
         } else {
