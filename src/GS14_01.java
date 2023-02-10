@@ -80,8 +80,6 @@ static class mapThread implements Runnable {
     public void run() {
         System.out.println("Running " + threadName);
         try {
-            int smallestDifFound = letterDifference(firstWord, secondWord);
-            int startDif = smallestDifFound;
             int target;
 
             for (int i = 0; i <= words.size(); i++) {
@@ -96,14 +94,7 @@ static class mapThread implements Runnable {
                     break;
                 }
 
-                boolean a = letterDifference(x, secondWord) <= smallestDifFound + smallestWord.length();
-                boolean b = letterDifference(x, firstWord) <= startDif;
-
                 ArrayList<String> neighbors = new ArrayList<String>();
-
-                if (letterDifference(x, secondWord) < smallestDifFound) {
-                    smallestDifFound = letterDifference(x, secondWord);
-                }
 
                 for (String temp : words) {
                     if (Math.abs(temp.length() - x.length()) < 2) {
@@ -115,6 +106,20 @@ static class mapThread implements Runnable {
                     }
                 }
                 EditNeighbors.put(x, neighbors);
+            }
+
+            if (threadID == 0) {
+                obj.setMapTarget(0);
+            } else {
+                sleep(1);
+            }
+
+            for (int i = 0, pos = 0; pos < EditNeighbors.size(); i++) {
+                synchronized (obj) {
+                    pos = obj.getTarget();
+                }
+
+                EditNeighbors.forEach();
             }
 
             System.out.println(threadName + " total time elapsed to create map (ms): " + (System.currentTimeMillis() - beginTime));
@@ -178,14 +183,14 @@ static class mapThread implements Runnable {
         
         int smallestTargetLengthLoc = Algorithms.binarySearchFirstLength(words, smallestWord, smallBuffer);
         o.setMapTarget(smallestTargetLengthLoc);
-        System.out.println(threadName + " binary search time (ms): " + (System.currentTimeMillis() - beginTime));
+        System.out.println("Binary search time (ms): " + (System.currentTimeMillis() - beginTime));
 
         for (int i = 0; i < THREAD_NUM; i++) {
             String name = "Thread " + i + ": ";
             mapThread temp = new mapThread(name, i, o);
             temp.start();
         }
-        while(threadsComplete != threadNum) {
+        while(threadsComplete != THREAD_NUM) {
             sleep(1);
         }
         System.out.println("Map size: " + EditNeighbors.size());
@@ -207,7 +212,7 @@ static class mapThread implements Runnable {
                 path.add(target);
 
                 for (String value : values) {
-                    if (!Algorithms.containsString(value, path) && !examined.contains(value) && EditNeighbors.containsKey(value)) {
+                    if (!Algorithms.containsString(value, path) && !examined.contains(value)) {
                         temp = 1;
                         break;
                     }
@@ -229,7 +234,7 @@ static class mapThread implements Runnable {
                 System.out.println("Values: " + values);
 
                 for (int x = 0; x < values.size(); x++) {
-                    if (letterDifference(values.get(x), secondWord) < smallestDif && !Algorithms.containsString(values.get(x), path) && !examined.contains(values.get(x)) && EditNeighbors.containsKey(values.get(x))) {
+                    if (letterDifference(values.get(x), secondWord) < smallestDif && !Algorithms.containsString(values.get(x), path) && !examined.contains(values.get(x))) {
                         smallestDif = letterDifference(values.get(x), secondWord);
                         smallestDifLoc = x;
                     }
@@ -242,7 +247,7 @@ static class mapThread implements Runnable {
                     }
                 } else {
                     for (String value : values) {
-                        if (!Algorithms.containsString(value, path) && !examined.contains(value) && EditNeighbors.containsKey(value)) {
+                        if (!Algorithms.containsString(value, path) && !examined.contains(value)) {
                             target = value;
                             if (target.equals(secondWord)) {
                                 path.add(target);
