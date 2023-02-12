@@ -16,7 +16,7 @@ Pseudocode:
 Maintenance Log:
  */
     
-    static int THREAD_NUM = 12;
+    static int THREAD_NUM = 16;
 
     static int threadsComplete = 0;
     static int smallBuffer = 0;
@@ -82,7 +82,7 @@ static class mapThread implements Runnable {
         try {
             int target;
 
-            for (int i = 0; i <= words.size(); i++) {
+            for (int i = 0; i < words.size(); i++) {
 
                 synchronized (obj) {
                     target = obj.getTarget();
@@ -101,27 +101,12 @@ static class mapThread implements Runnable {
                         if (isEditDistance(temp, x)) {
                             neighbors.add(temp);
                         }
-                    } else if (temp.length() > x.length()){
+                    } else if (temp.length() > x.length() + bigBuffer){
                         break;
                     }
                 }
                 EditNeighbors.put(x, neighbors);
             }
-
-            if (threadID == 0) {
-                obj.setMapTarget(0);
-            } else {
-                sleep(1);
-            }
-
-            for (int i = 0, pos = 0; pos < EditNeighbors.size(); i++) {
-                synchronized (obj) {
-                    pos = obj.getTarget();
-                }
-
-                EditNeighbors.forEach();
-            }
-
             System.out.println(threadName + " total time elapsed to create map (ms): " + (System.currentTimeMillis() - beginTime));
         } catch (Exception e) {
             System.out.println(threadName + " error");
@@ -161,6 +146,9 @@ static class mapThread implements Runnable {
         System.out.print("Enter ending word: ");
         secondWord = r.nextLine();
 
+        firstWord = firstWord.replaceAll(" ", "");
+        secondWord = secondWord.replaceAll(" ", "");
+
         beginTime = System.currentTimeMillis();
 
         if (firstWord.length() > secondWord.length()) {
@@ -193,8 +181,18 @@ static class mapThread implements Runnable {
         while(threadsComplete != THREAD_NUM) {
             sleep(1);
         }
+
+        EditNeighbors.forEach((k, v) -> {
+            for (int i = 0; i < v.size(); i++) {
+                v.removeIf((e) -> {
+                    return !EditNeighbors.containsKey(e);
+                });
+                EditNeighbors.put(k, v);
+            }
+        });
+
         System.out.println("Map size: " + EditNeighbors.size());
-        
+
         long pathTime = System.currentTimeMillis();
         
         if (EditNeighbors.containsKey(firstWord) && EditNeighbors.containsKey(secondWord)) {
@@ -206,61 +204,66 @@ static class mapThread implements Runnable {
 
             for (int i = 0; !target.equals(secondWord) && !complete; i++) {
                 ArrayList<String> values = new ArrayList<String>(EditNeighbors.get(target));
+                ArrayList<String> pValues = new ArrayList<>();
                 int smallestDif = letterDifference(target, secondWord);
                 int smallestDifLoc = -1;
-                temp = -1;
                 path.add(target);
 
-                for (String value : values) {
-                    if (!Algorithms.containsString(value, path) && !examined.contains(value)) {
-                        temp = 1;
-                        break;
-                    }
-                }
-
-                if (temp == -1) {
-                    examined.add(target);
-                    if (path.size() < 2) {
+                if (examined.contains(target)) { // double failsafe
+                    path.remove(path.size() - 1);
+                    if (path.size() < 1) { // nowhere else to go
                         complete = true;
                     } else {
-                        path.remove(path.size() - 1);
                         target = path.get(path.size() - 1);
+
                     }
                 }
 
-                System.out.println("Examined: " + examined);
-                System.out.println("Path: " + path);
+                System.out.println("Examined: " + examined.size());
+                System.out.println("Path: " + path.size());
                 System.out.println("Target: " + target);
-                System.out.println("Values: " + values);
+                System.out.println("Values: " + values.size());
 
-                for (int x = 0; x < values.size(); x++) {
-                    if (letterDifference(values.get(x), secondWord) < smallestDif && !Algorithms.containsString(values.get(x), path) && !examined.contains(values.get(x))) {
-                        smallestDif = letterDifference(values.get(x), secondWord);
-                        smallestDifLoc = x;
+                for (int p = 0; p < values.size(); p++) { // checking for possible values we can use
+                    if (!Algorithms.containsString(values.get(p), path) && !examined.contains(values.get(p))) {
+                        pValues.add(values.get(p));
                     }
                 }
 
-                if (smallestDifLoc != -1) {
-                    target = values.get(smallestDifLoc);
-                    if (target.equals(secondWord)) {
+                System.out.println("Possible values: " + pValues.size());
+
+                if (pValues.size() > 0) { // haven't made it to end of path yet
+                    smallestDifLoc = 0;
+                    smallestDif = letterDifference(pValues.get(0), secondWord);
+                }
+
+                for (int x = 0; x < pValues.size(); x++) { // checking which possible value will get us the closest to end
+                    if (letterDifference(pValues.get(x), secondWord) < smallestDif) {
+                        smallestDifLoc = x;
+                        smallestDif = letterDifference(pValues.get(x), secondWord);
+                    }
+                }
+
+                System.out.println("Smallest dif loc: " + smallestDifLoc);
+
+                if (smallestDifLoc == -1) { // failsafe if no words found
+                    examined.add(target);
+                    path.remove(path.size() - 1);
+                    if (path.size() < 1) { // nowhere else to go
+                        complete = true;
+                    } else {
+                        target = path.get(path.size() - 1);
+
+                    }
+                    target = path.get(path.size() - 1);
+                } else {
+                    target = pValues.get(smallestDifLoc);
+                    if (secondWord.equals(target)) { // word found
                         path.add(target);
                     }
-                } else {
-                    for (String value : values) {
-                        if (!Algorithms.containsString(value, path) && !examined.contains(value)) {
-                            target = value;
-                            if (target.equals(secondWord)) {
-                                path.add(target);
-                            }
-                        }
-                    }
                 }
+
                 System.out.println("New target: " + target);
-                if (EditNeighbors.containsKey(target)) {
-                    System.out.println("contains new target");
-                } else {
-                    System.out.println("does not contain new target");
-                }
             }
 
             if (!complete) {
