@@ -16,7 +16,7 @@ Pseudocode:
 Maintenance Log:
  */
     
-    static int THREAD_NUM = 2;
+    static int THREAD_NUM = 12;
 
     static int threadsComplete = 0;
     static int smallBuffer = 0;
@@ -30,43 +30,52 @@ Maintenance Log:
     static HashMap<String, List<String>> EditNeighbors = new HashMap<String, List<String>>();
 
     public static boolean isEditDistance (String in1, String in2) {
-        return letterDifference(in1, in2) < 2 && !in1.equals(in2);
+        int out = 0;
+
+        int n = in1.length();
+        int m = in2.length();
+        if (n < m) {
+            return isEditDistance(in2, in1);
+        }
+        for (int i = 0; i < m; i++) {
+            if (in1.charAt(i) != in2.charAt(i)) {
+                if (n == m) {
+                    return in1.substring(i + 1).equals(in2.substring(i + 1));
+                }
+                return in1.substring(i + 1).equals(in2.substring(i));
+            }
+        }
+        return m + 1 == n;
     }
 
     public static int letterDifference(String i1, String i2) {
-        int x = 0;
-        int y = 0;
-        int out = 0;
-
-        String bWord;
-        String sWord;
-        
-        if (i1.length() != i2.length()) {
-            if (i1.length() > i2.length()) {
-                bWord = i1;
-                sWord = i2;
-            } else {
-                bWord = i2;
-                sWord = i1;
-            }
-    
-            for (int i = 0; i < sWord.length(); i++) {
-                if (bWord.charAt(x) != sWord.charAt(y)) {
-                    out++;
-                    x++;
-                } else {
-                    x++;
-                    y++;
+        int n = i1.length();
+        int m =i2.length();
+        int [][] dp = new int [n+1][];
+        for (int i = 0;i <= n; i++){
+            dp[i] = new int [m+1];
+            for(int j = 0;j <= m; j++) {
+                dp[i][j]=0;
+                if (i == 0) {
+                    dp[i][j]=j;
                 }
-            }
-        } else {
-            for (int i = 0; i < i1.length(); i++) {
-                if (i1.charAt(i) != i2.charAt(i) {
-                    out++;
+                else if (j == 0) {
+                    dp[i][j] = i;
                 }
             }
         }
-        return out;
+        i1 = " " + i1;
+        i2 = " " + i2;
+        for (int i = 1;i <= n; i++){
+            for (int j = 1;j <= m; j++){
+                if (i1.charAt(i) != i2.charAt(j)) {
+                    dp[i][j] = 1 + Arrays.stream(dp).min ({dp[i-1][j],dp[i][j-1],dp[i-1][j-1]});
+                } else {
+                    dp[i][j] = dp[i-1][j-1];
+                }
+            }
+        }
+        return dp[n][m];
     }
 
 public static class sync {
@@ -141,8 +150,8 @@ static class mapThread implements Runnable {
 }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        //String fileName = "dictionarySortedLength.txt";
-        String fileName = "dictionaryMonkeyBusiness.txt";
+        String fileName = "dictionarySortedLength.txt";
+        //String fileName = "dictionaryMonkeyBusiness.txt";
 
         FileReader fr = new FileReader(fileName);
         Scanner lineScanner = new Scanner(fr);
