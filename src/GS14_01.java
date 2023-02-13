@@ -40,25 +40,32 @@ Maintenance Log:
 
         String bWord;
         String sWord;
-
-        if (i1.length() > i2.length()) {
-            bWord = i1;
-            sWord = i2;
-        } else {
-            bWord = i2;
-            sWord = i1;
-        }
-
-        for (int i = 0; i < sWord.length(); i++) {
-            if (bWord.charAt(x) != sWord.charAt(y)) {
-                out++;
-                x++;
+        
+        if (i1.length() != i2.length()) {
+            if (i1.length() > i2.length()) {
+                bWord = i1;
+                sWord = i2;
             } else {
-                x++;
-                y++;
+                bWord = i2;
+                sWord = i1;
+            }
+    
+            for (int i = 0; i < sWord.length(); i++) {
+                if (bWord.charAt(x) != sWord.charAt(y)) {
+                    out++;
+                    x++;
+                } else {
+                    x++;
+                    y++;
+                }
+            }
+        } else {
+            for (int i = 0; i < i1.length(); i++) {
+                if (i1.charAt(i) != i2.charAt(i) {
+                    out++;
+                }
             }
         }
-
         return out;
     }
 
@@ -111,7 +118,7 @@ static class mapThread implements Runnable {
                         if (isEditDistance(temp, x)) {
                             neighbors.add(temp);
                         }
-                    } else if (temp.length() > x.length() + bigBuffer){
+                    } else if (temp.length() > x.length() + 2){
                         break;
                     }
                 }
@@ -193,7 +200,7 @@ static class mapThread implements Runnable {
 
         EditNeighbors.forEach((k, v) -> { // remove elements from values that aren't mapped to avoid null pointer errors
             for (int i = 0; i < v.size(); i++) {
-                v.removeIf((e) -> {
+                v.removeIf((e) -> { // i still don't understand -> like why does the code need directions? just like look over there yourself
                     return !EditNeighbors.containsKey(e);
                 });
                 EditNeighbors.put(k, v);
@@ -204,7 +211,7 @@ static class mapThread implements Runnable {
 
         long pathTime = System.currentTimeMillis();
         
-        if (EditNeighbors.containsKey(firstWord) && EditNeighbors.containsKey(secondWord)) { // if words are present in map
+        if (EditNeighbors.containsKey(firstWord) && EditNeighbors.containsKey(secondWord)) { // check for if words are present in map
             ArrayList<String> path = new ArrayList<String>();
             Set<String> examined = new HashSet<String>();
             String target = firstWord;
