@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f12e8b23-4312-4ae3-9faf-a14d684514af" name="Changes" comment="2/11/23" />
+    <list default="true" id="f12e8b23-4312-4ae3-9faf-a14d684514af" name="Changes" comment="2/7/23">
+      <change afterPath="$PROJECT_DIR$/dictionaryMonkeyBusiness.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GS14_01.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GS14_01.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -51,6 +55,13 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1663684532364</updated>
+    </task>
+    <task id="LOCAL-00001" summary="asd">
+      <created>1663684752485</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1663684752485</updated>
     </task>
     <task id="LOCAL-00002" summary="asd">
       <created>1663684842293</created>
@@ -367,35 +378,14 @@
       <option name="project" value="LOCAL" />
       <updated>1674836812615</updated>
     </task>
-    <task id="LOCAL-00047" summary="2/8/23">
-      <created>1675902721981</created>
+    <task id="LOCAL-00047" summary="2/7/23">
+      <created>1675788395339</created>
       <option name="number" value="00047" />
       <option name="presentableId" value="LOCAL-00047" />
       <option name="project" value="LOCAL" />
-      <updated>1675902721981</updated>
+      <updated>1675788395339</updated>
     </task>
-    <task id="LOCAL-00048" summary="2/8/23">
-      <created>1675927003099</created>
-      <option name="number" value="00048" />
-      <option name="presentableId" value="LOCAL-00048" />
-      <option name="project" value="LOCAL" />
-      <updated>1675927003099</updated>
-    </task>
-    <task id="LOCAL-00049" summary="2/9/23">
-      <created>1676015172974</created>
-      <option name="number" value="00049" />
-      <option name="presentableId" value="LOCAL-00049" />
-      <option name="project" value="LOCAL" />
-      <updated>1676015172974</updated>
-    </task>
-    <task id="LOCAL-00050" summary="2/11/23">
-      <created>1676175137171</created>
-      <option name="number" value="00050" />
-      <option name="presentableId" value="LOCAL-00050" />
-      <option name="project" value="LOCAL" />
-      <updated>1676175137171</updated>
-    </task>
-    <option name="localTasksCounter" value="51" />
+    <option name="localTasksCounter" value="48" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -421,6 +411,8 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <MESSAGE value="10/26/22" />
+    <MESSAGE value="10/28/22" />
     <MESSAGE value="10/31/22" />
     <MESSAGE value="11/1/22" />
     <MESSAGE value="11/2/22" />
@@ -443,19 +435,7 @@
     <MESSAGE value="1/23/23" />
     <MESSAGE value="1/24/23" />
     <MESSAGE value="1/25/23" />
-    <MESSAGE value="2/8/23" />
-    <MESSAGE value="2/9/23" />
-    <MESSAGE value="2/11/23" />
-    <option name="LAST_COMMIT_MESSAGE" value="2/11/23" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <breakpoint enabled="true" type="java-exception">
-          <properties class="java.lang.NullPointerException" package="java.lang" />
-          <option name="timeStamp" value="1" />
-        </breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="2/7/23" />
+    <option name="LAST_COMMIT_MESSAGE" value="2/7/23" />
   </component>
 </project>
