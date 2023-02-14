@@ -19,6 +19,7 @@ Maintenance Log:
     static int THREAD_NUM = 16;
 
     static int threadsComplete = 0;
+    static int startLoc;
     static int smallBuffer = 0;
     static int bigBuffer = 0;
     static long beginTime;
@@ -108,12 +109,13 @@ static class mapThread implements Runnable {
                 }
 
                 ArrayList<String> neighbors = new ArrayList<String>();
-                for (String temp : words) {
+                for (int t = startLoc; t < words.size(); t++) {
+                    temp = words.get(t);
                     if (Math.abs(temp.length() - x.length()) < 2) {
                         if (isEditDistance(temp, x)) {
                             neighbors.add(temp);
                         }
-                    } else if (temp.length() > x.length() + 2){
+                    } else if (temp.length() > x.length() + 1){
                         break;
                     }
                 }
@@ -181,6 +183,7 @@ static class mapThread implements Runnable {
         sync o = new sync();
         
         int smallestTargetLengthLoc = Algorithms.binarySearchFirstLength(words, smallestWord, smallBuffer);
+        startLoc = Algorithms.binarySearchFirstLength(words, smallestWord, 1);
         o.setMapTarget(smallestTargetLengthLoc);
         System.out.println("Binary search time (ms): " + (System.currentTimeMillis() - beginTime));
 
