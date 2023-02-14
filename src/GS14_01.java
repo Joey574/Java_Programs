@@ -16,7 +16,7 @@ Pseudocode:
 Maintenance Log:
  */
     
-    static int THREAD_NUM = 12;
+    static int THREAD_NUM = 16;
 
     static int threadsComplete = 0;
     static int smallBuffer = 0;
@@ -30,52 +30,39 @@ Maintenance Log:
     static HashMap<String, List<String>> EditNeighbors = new HashMap<String, List<String>>();
 
     public static boolean isEditDistance (String in1, String in2) {
-        int out = 0;
+        return letterDifference(in1, in2) < 2 && !in1.equals(in2);
+    }
 
-        int n = in1.length();
-        int m = in2.length();
-        if (n < m) {
-            return isEditDistance(in2, in1);
+    static int min(int x, int y, int z) {
+        if (x <= y && x <= z) {
+            return x;
+        } if (y <= x && y <= z) {
+            return y;
+        } else {
+            return z;
         }
-        for (int i = 0; i < m; i++) {
-            if (in1.charAt(i) != in2.charAt(i)) {
-                if (n == m) {
-                    return in1.substring(i + 1).equals(in2.substring(i + 1));
-                }
-                return in1.substring(i + 1).equals(in2.substring(i));
-            }
-        }
-        return m + 1 == n;
     }
 
     public static int letterDifference(String i1, String i2) {
-        int n = i1.length();
-        int m =i2.length();
-        int [][] dp = new int [n+1][];
-        for (int i = 0;i <= n; i++){
-            dp[i] = new int [m+1];
-            for(int j = 0;j <= m; j++) {
-                dp[i][j]=0;
+        int m = i1.length();
+        int n = i2.length();
+
+        int dp [][] = new int[m + 1][n + 1];
+
+        for (int i = 0; i <= m; i++) {
+            for (int x = 0; x <= n; x++) {
                 if (i == 0) {
-                    dp[i][j]=j;
-                }
-                else if (j == 0) {
-                    dp[i][j] = i;
-                }
-            }
-        }
-        i1 = " " + i1;
-        i2 = " " + i2;
-        for (int i = 1;i <= n; i++){
-            for (int j = 1;j <= m; j++){
-                if (i1.charAt(i) != i2.charAt(j)) {
-                    dp[i][j] = 1 + Arrays.stream(dp).min ({dp[i-1][j],dp[i][j-1],dp[i-1][j-1]});
+                    dp[i][x] = x;
+                } else if (x == 0) {
+                    dp[i][x] = i;
+                } else if (i1.charAt(i - 1) == i2.charAt(x - 1)) {
+                    dp[i][x] = dp[i - 1][x - 1];
                 } else {
-                    dp[i][j] = dp[i-1][j-1];
+                    dp[i][x] = 1 + min(dp[i][x - 1], dp[i - 1][x], dp[i - 1][x - 1]);
                 }
             }
         }
-        return dp[n][m];
+        return dp[m][n];
     }
 
 public static class sync {
@@ -121,7 +108,6 @@ static class mapThread implements Runnable {
                 }
 
                 ArrayList<String> neighbors = new ArrayList<String>();
-
                 for (String temp : words) {
                     if (Math.abs(temp.length() - x.length()) < 2) {
                         if (isEditDistance(temp, x)) {
