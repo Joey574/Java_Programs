@@ -110,7 +110,7 @@ static class mapThread implements Runnable {
 
                 ArrayList<String> neighbors = new ArrayList<String>();
                 for (int t = startLoc; t < words.size(); t++) {
-                    temp = words.get(t);
+                    String temp = words.get(t);
                     if (Math.abs(temp.length() - x.length()) < 2) {
                         if (isEditDistance(temp, x)) {
                             neighbors.add(temp);
