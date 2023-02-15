@@ -15,11 +15,13 @@ Purpose:
 Pseudocode:
 Maintenance Log:
  */
-    
+
     static int THREAD_NUM = 16;
 
     static int threadsComplete = 0;
     static int startLoc;
+    static int startDif;
+    static int smallestDifFound;
     static int smallBuffer = 0;
     static int bigBuffer = 0;
     static long beginTime;
@@ -31,111 +33,139 @@ Maintenance Log:
     static HashMap<String, List<String>> EditNeighbors = new HashMap<String, List<String>>();
 
     public static boolean isEditDistance (String in1, String in2) {
-        return letterDifference(in1, in2) < 2 && !in1.equals(in2);
-    }
+        int m = in1.length(), n = in2.length();
 
-    static int min(int x, int y, int z) {
-        if (x <= y && x <= z) {
-            return x;
-        } if (y <= x && y <= z) {
-            return y;
-        } else {
-            return z;
-        }
-    }
+        if (Math.abs(m - n) > 1)
+            return false;
 
-    public static int letterDifference(String i1, String i2) {
-        int m = i1.length();
-        int n = i2.length();
+        int count = 0;
 
-        int dp [][] = new int[m + 1][n + 1];
-
-        for (int i = 0; i <= m; i++) {
-            for (int x = 0; x <= n; x++) {
-                if (i == 0) {
-                    dp[i][x] = x;
-                } else if (x == 0) {
-                    dp[i][x] = i;
-                } else if (i1.charAt(i - 1) == i2.charAt(x - 1)) {
-                    dp[i][x] = dp[i - 1][x - 1];
-                } else {
-                    dp[i][x] = 1 + min(dp[i][x - 1], dp[i - 1][x], dp[i - 1][x - 1]);
+        int i = 0, j = 0;
+        while (i < m && j < n)
+        {
+            if (in1.charAt(i) != in2.charAt(j)) {
+                if (count == 1) {
+                    return false;
                 }
+                if (m > n) {
+                    i++;
+                } else if (m < n) {
+                    j++;
+                } else {
+                    i++;
+                    j++;
+                }
+                count++;
+            } else {
+                i++;
+                j++;
             }
         }
-        return dp[m][n];
+        if (i < m || j < n) {
+            count++;
+        }
+        return count == 1;
+    }
+    public static int letterDifference(String i1, String i2) {
+        int t = 0;
+        int i = 0;
+
+        for (i = 0; i < i1.length() && i < i2.length(); i++) {
+            if (i1.charAt(i) != i2.charAt(i)) {
+                t++;
+            }
+        }
+
+        if (i < i1.length()) {
+            t += i1.length() - i;
+        } else if (i < i2.length()) {
+            t += i2.length() - i;
+        }
+
+        return t;
     }
 
-public static class sync {
-    static private int mapTarget = 0;
+    public static class sync {
+        static private int mapTarget = 0;
 
-    static int getTarget() {
-        mapTarget++;
-        return mapTarget - 1;
+        static int getTarget() {
+            mapTarget++;
+            return mapTarget - 1;
+        }
+
+        static void setMapTarget(int i) {
+            mapTarget = i;
+        }
     }
 
-    static void setMapTarget(int i) {
-        mapTarget = i;
-    }
-}
+    static class mapThread implements Runnable {
+        private final String threadName;
+        private Thread t;
+        final sync obj;
 
-static class mapThread implements Runnable {
-    private final String threadName;
-    private final int threadID;
-    private Thread t;
-    final sync obj;
+        mapThread(String name, sync o) {
+            threadName = name;
+            obj = o;
+        }
 
-    mapThread(String name, int num, sync o) {
-        threadName = name;
-        threadID = num;
-        obj = o;
-    }
+        public void run() {
+            System.out.println("Running " + threadName);
+            try {
+                int target;
 
-    public void run() {
-        System.out.println("Running " + threadName);
-        try {
-            int target;
+                for (int i = 0; i < words.size(); i++) {
 
-            for (int i = 0; i < words.size(); i++) {
+                    synchronized (obj) {
+                        target = obj.getTarget();
+                    }
 
-                synchronized (obj) {
-                    target = obj.getTarget();
-                }
+                    String x = words.get(target);
 
-                String x = words.get(target);
-
-                if (x.length() > biggestWord.length() + bigBuffer) {
-                    break;
-                }
-
-                ArrayList<String> neighbors = new ArrayList<String>();
-                for (int t = startLoc; t < words.size(); t++) {
-                    String temp = words.get(t);
-                    if (Math.abs(temp.length() - x.length()) < 2) {
-                        if (isEditDistance(temp, x)) {
-                            neighbors.add(temp);
-                        }
-                    } else if (temp.length() > x.length() + 1){
+                    if (x.length() > biggestWord.length() + bigBuffer) {
                         break;
                     }
-                }
-                EditNeighbors.put(x, neighbors);
-            }
-            System.out.println(threadName + " total time elapsed to create map (ms): " + (System.currentTimeMillis() - beginTime));
-        } catch (Exception e) {
-            System.out.println(threadName + " error");
-        }
-        System.out.println(threadName + " complete");
-        threadsComplete++;
-    }
 
-    public void start() {
-        if (t == null) {
-            t = new Thread(this, threadName);
-            t.start();
+                    boolean a = letterDifference(x, secondWord) <= smallestDifFound;
+                    boolean b = letterDifference(x, firstWord) <= startDif;
+
+                    if (a || b) {
+
+                        int tempDif = letterDifference(x, secondWord);
+
+                        if (tempDif < smallestDifFound) {
+                            smallestDifFound = tempDif;
+                        }
+
+                        ArrayList<String> neighbors = new ArrayList<String>();
+                        for (int t = startLoc; t < words.size(); t++) {
+                            String temp = words.get(t);
+                            if (Math.abs(temp.length() - x.length()) < 2) {
+                                if (isEditDistance(temp, x)) {
+                                    neighbors.add(temp);
+                                }
+                            } else if (temp.length() > x.length() + 1){
+                                break;
+                            }
+                        }
+                        EditNeighbors.put(x, neighbors);
+                    }
+                    System.out.println(threadName + target);
+                }
+                System.out.println(threadName + " total time elapsed to create map (ms): " + (System.currentTimeMillis() - beginTime));
+            } catch (Exception e) {
+                System.out.println(threadName + " error");
+            }
+            System.out.println(threadName + " complete");
+            threadsComplete++;
+        }
+
+        public void start() {
+            if (t == null) {
+                t = new Thread(this, threadName);
+                t.start();
+            }
         }
     }
-}
 
     public static void main(String[] args) throws IOException, InterruptedException {
         String fileName = "dictionarySortedLength.txt";
@@ -167,29 +197,32 @@ static class mapThread implements Runnable {
         if (firstWord.length() > secondWord.length()) {
             smallestWord = secondWord;
             biggestWord = firstWord;
-          
+
         } else {
             smallestWord = firstWord;
             biggestWord = secondWord;
-           
+
         }
         if (smallestWord.length() > 5) {
             smallBuffer = smallestWord.length() / 3;
-        }        
+        }
         if (biggestWord.length() > 7) {
             bigBuffer = biggestWord.length() / 3;
-        }     
+        }
 
         sync o = new sync();
-        
+
         int smallestTargetLengthLoc = Algorithms.binarySearchFirstLength(words, smallestWord, smallBuffer);
         startLoc = Algorithms.binarySearchFirstLength(words, smallestWord, 1);
         o.setMapTarget(smallestTargetLengthLoc);
         System.out.println("Binary search time (ms): " + (System.currentTimeMillis() - beginTime));
 
+        startDif = letterDifference(firstWord, secondWord);
+        smallestDifFound = startDif;
+
         for (int i = 0; i < THREAD_NUM; i++) {
             String name = "Thread " + i + ": ";
-            mapThread temp = new mapThread(name, i, o);
+            mapThread temp = new mapThread(name, o);
             temp.start();
         }
         while(threadsComplete != THREAD_NUM) {
@@ -208,7 +241,7 @@ static class mapThread implements Runnable {
         System.out.println("Map size: " + EditNeighbors.size());
 
         long pathTime = System.currentTimeMillis();
-        
+
         if (EditNeighbors.containsKey(firstWord) && EditNeighbors.containsKey(secondWord)) { // check for if words are present in map
             ArrayList<String> path = new ArrayList<String>();
             Set<String> examined = new HashSet<String>();
