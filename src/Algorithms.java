@@ -115,13 +115,4 @@ public class Algorithms
         return false;
     }
 
-    public static boolean containsArray(List<String> in1, List<String> in2) {
-        int t = 0;
-        for (int i = 0; i < in1.size(); i++) {
-            if (in2.contains(in1.get(i))) {
-                i++;
-            }
-        }
-        return t == in1.size();
-    }
 }

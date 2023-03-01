@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
@@ -15,63 +16,80 @@ Pseudocode:
 Maintenance Log:
  */
 
-
-    public static HashMap<Character, Integer> mapValues(String in) {
-        HashMap<Character, Integer> out = new HashMap<Character, Integer>();
-
-        for (int i = 0; i < in.length(); i++) {
-            if (out.containsKey(in.charAt(i))) {
-                out.put(in.charAt(i), out.get(in.charAt(i)) + 1);
-            } else {
-                out.put(in.charAt(i), 1);
-            }
+    public static String canonicalForm(String word) {
+        char[] string = new char[word.length()];
+        for (int i = 0; i < word.length(); i ++) {
+            string[i] = word.charAt(i);
         }
-
-        return out;
+        mergeSort(string);
+        StringBuilder result = new StringBuilder();
+        for (char ch: string) {
+            result.append(ch);
+        }
+        return result.toString();
     }
 
-    public static class compareMaps implements Comparator<Map<Character, Integer>>
-    {
-        public int compare(Map<Character, Integer> o1, Map<Character, Integer> o2) {
-            if (o1.equals(o2)) {
-                return 1;
+    public static void mergeSort(char[] string) {
+        if (string.length > 1) {
+            char[] left = Arrays.copyOfRange(string, 0, string.length/2);
+            char[] right = Arrays.copyOfRange(string, string.length/2, string.length);
+            mergeSort(left);
+            mergeSort(right);
+            merge(string, left, right);
+        }
+    }
+
+    public static void merge(char[] string, char[] left, char[] right) {
+        int i1 = 0;
+        int i2 = 0;
+        for (int i = 0; i < string.length; i++) {
+            if (i1 < left.length && i2 < right.length) {
+                if (left[i1] - right[i2] <= 0) {
+                    string[i] = left[i1];
+                    i1++;
+                } else {
+                    string[i] = right[i2];
+                    i2++;
+                }
+            } else if (i2 >= right.length) {
+                string[i] = left[i1];
+                i1++;
             } else {
-                return 0;
+                string[i] = right[i2];
+                i2++;
             }
         }
     }
 
     public static void main(String[] args) throws IOException {
-        String fileName = "dictionarySortedLength.txt";
 
+        String fileName = "dictionarySorted.txt";
         FileReader fr = new FileReader(fileName);
         Scanner lineScanner = new Scanner(fr);
 
-        LinkedList<String> words = new LinkedList<>();
+        HashMap<String, ArrayList<String>> Anagrams = new HashMap<>();
 
-        while (lineScanner.hasNextLine()) {
-            words.add(lineScanner.nextLine());
+        while(lineScanner.hasNextLine()) {
+            String temp = lineScanner.nextLine();
+            String tempA = canonicalForm(temp);
+            ArrayList<String> values = new ArrayList<>();
+            if (Anagrams.containsKey(tempA)) {
+                values = Anagrams.get(tempA);
+                values.add(temp);
+                Anagrams.put(tempA, values);
+            } else {
+                values.add(temp);
+                Anagrams.put(tempA, values);
+            }
         }
 
-        fr.close();
-        System.out.println("File closed");
+        fileName = "anagramOutput.txt";
+        FileWriter fw = new FileWriter(fileName);
 
-        Scanner r = new Scanner(System.in);
+        ArrayList<String> keys = (ArrayList<String>) Anagrams.keySet();
 
-        System.out.print("Enter word: ");
-        String word = r.nextLine();
-
-        int startLoc = Algorithms.binarySearchFirstLength(words, word, 0);
-
-        HashMap<Character, Integer> startMap = mapValues(word);
-        ArrayList<String> anagrams = new ArrayList<>();
-        List<HashMap<Character, Integer>> mapList = new LinkedList<>();
-        mapList.add(startMap);
-
-        for (int i = startLoc; words.get(i).length() <= word.length(); i++) {
-            HashMap<Character, Integer> temp = mapValues(words.get(i));
-            mapList.add(temp);
+        for (int i = 0; i < keys.size(); i++) {
+            fw.write(keys.get(i) + ": " + Anagrams.get(keys.get(i)) + "\n");
         }
-        System.out.println(anagrams);
     }
 }
