@@ -83,13 +83,24 @@ Maintenance Log:
             }
         }
 
+        fr.close();
+
+        System.out.println("File reader closed");
+
         fileName = "anagramOutput.txt";
         FileWriter fw = new FileWriter(fileName);
 
-        ArrayList<String> keys = (ArrayList<String>) Anagrams.keySet();
+        Set<String> keysS = Anagrams.keySet();
+
+        ArrayList<String> keys = new ArrayList<>(keysS);
 
         for (int i = 0; i < keys.size(); i++) {
             fw.write(keys.get(i) + ": " + Anagrams.get(keys.get(i)) + "\n");
         }
+
+        fw.close();
+
+        System.out.println("File writer closed");
+
     }
 }
