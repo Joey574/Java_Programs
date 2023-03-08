@@ -56,8 +56,10 @@ public class Algorithms
             while(in.get(out).length() >= target.length() - smallBuffer) {
                 if (out > 30) {
                     out -= 30;
-                } else {
+                } else if (out > 0){
                     out--;
+                } else {
+                    return 0;
                 }
             }
 

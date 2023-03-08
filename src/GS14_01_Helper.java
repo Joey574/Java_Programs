@@ -114,11 +114,33 @@ Maintenance Log:
                     String x = words.get(target);
 
                     ArrayList<String> neighbors = new ArrayList<String>();
-                    for (int t = 0; t < words.size(); t++) {
+                    for (int t = Algorithms.binarySearchFirstLength(words, x, 1); t < words.size(); t++) {
                         String temp = words.get(t);
                         if (Math.abs(temp.length() - x.length()) < 2) {
-                            if (isEditDistance(temp, x)) {
-                                neighbors.add(temp);
+                            if (!EditNeighbors.containsKey(x)) {
+                                if (isEditDistance(temp, x)) {
+                                    neighbors.add(temp);
+                                    if (EditNeighbors.containsKey(temp)) {
+                                        List<String> tempL = EditNeighbors.get(temp);
+                                        tempL.add(temp);
+                                        EditNeighbors.put(temp, tempL);
+                                    } else {
+                                        List<String> tempVal = new ArrayList<>(List.of(x));
+                                        EditNeighbors.put(temp, tempVal);
+                                    }
+                                }
+                            } else if (!EditNeighbors.get(x).contains(temp)) {
+                                if (isEditDistance(temp, x)) {
+                                    neighbors.add(temp);
+                                    if (EditNeighbors.containsKey(temp)) {
+                                        List<String> tempL = EditNeighbors.get(temp);
+                                        tempL.add(temp);
+                                        EditNeighbors.put(temp, tempL);
+                                    } else {
+                                        List<String> tempVal = new ArrayList<>(List.of(x));
+                                        EditNeighbors.put(temp, tempVal);
+                                    }
+                                }
                             }
                         } else if (temp.length() > x.length() + 1){
                             break;
@@ -128,7 +150,7 @@ Maintenance Log:
                     }
                 System.out.println(threadName + " total time elapsed to create map (ms): " + (System.currentTimeMillis() - beginTime));
             } catch (Exception e) {
-                System.out.println(threadName + " error");
+                System.out.println(threadName + " error; " + e);
             }
             System.out.println(threadName + " complete");
             threadsComplete++;
@@ -164,7 +186,6 @@ Maintenance Log:
         sync o = new sync();
 
         o.setMapTarget(0);
-        System.out.println("Binary search time (ms): " + (System.currentTimeMillis() - beginTime));
 
         for (int i = 0; i < THREAD_NUM; i++) {
             String name = "Thread " + i + ": ";
