@@ -33,6 +33,46 @@ Maintenance Log:
     static LinkedList<String> words = new LinkedList<>();
     static HashMap<String, List<String>> EditNeighbors = new HashMap<String, List<String>>();
 
+    public static int binarySearchFirstLength(String target, int smallBuffer) {
+        boolean complete = false;
+
+        int out = -1;
+        int start = 0;
+        int end = words.size();
+
+        for (int i = 0; !complete; i++) {
+            int loc = (start + end) / 2;
+            if (words.get(loc).length() == target.length()) {
+                complete = true;
+                out = loc;
+            } else if (words.get(loc).length() > target.length()) {
+                end = loc;
+            } else if (words.get(loc).length() < target.length()) {
+                start = loc;
+            }
+            if (start > end || start == end) {
+                complete = true;
+                out = -loc;
+            }
+        }
+
+        while(words.get(out).length() >= target.length() - smallBuffer) {
+            if (out > 30) {
+                out -= 30;
+            } else if (out > 0){
+                out--;
+            } else {
+                return 0;
+            }
+        }
+
+        while(words.get(out).length() != target.length() - smallBuffer) {
+            out++;
+        }
+
+        return out;
+    }
+
     public static boolean isEditDistance (String in1, String in2) {
         int m = in1.length(), n = in2.length();
 
@@ -126,27 +166,32 @@ Maintenance Log:
                         break;
                     }
 
-                    boolean a = letterDifference(x, firstWord) <= startDif + smallBuffer;
-
-                    if (a) {
-
-                        ArrayList<String> neighbors = new ArrayList<String>();
-                        for (int t = startLoc; t < words.size(); t++) {
-                            String temp = words.get(t);
-                            if (Math.abs(temp.length() - x.length()) < 2) {
+                    ArrayList<String> neighbors = new ArrayList<String>();
+                    for (int t = binarySearchFirstLength(x, 1); t < words.size(); t++) {
+                        String temp = words.get(t);
+                        if (Math.abs(temp.length() - x.length()) < 2) {
+                            if (!EditNeighbors.containsKey(x) || !EditNeighbors.get(x).contains(temp)) {
                                 if (isEditDistance(temp, x)) {
                                     neighbors.add(temp);
+                                    if (EditNeighbors.containsKey(temp)) {
+                                        List<String> tempL = EditNeighbors.get(temp);
+                                        tempL.add(temp);
+                                        EditNeighbors.put(temp, tempL);
+                                    } else {
+                                        List<String> tempVal = new ArrayList<>(List.of(x));
+                                        EditNeighbors.put(temp, tempVal);
+                                    }
                                 }
-                            } else if (temp.length() > x.length() + 1){
-                                break;
                             }
+                        } else if (temp.length() > x.length() + 1){
+                            break;
                         }
-                        EditNeighbors.put(x, neighbors);
                     }
+                    EditNeighbors.put(x, neighbors);
                 }
                 System.out.println(threadName + " total time elapsed to create map (ms): " + (System.currentTimeMillis() - beginTime));
             } catch (Exception e) {
-                System.out.println(threadName + " error");
+                System.out.println(threadName + " Error: " + e.getCause());
             }
             System.out.println(threadName + " complete");
             threadsComplete++;
@@ -161,8 +206,8 @@ Maintenance Log:
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        //String fileName = "dictionarySortedLength.txt";
-        String fileName = "dictionaryMonkeyBusiness.txt";
+        String fileName = "dictionarySortedLength.txt";
+        //String fileName = "dictionaryMonkeyBusiness.txt";
 
         FileReader fr = new FileReader(fileName);
         Scanner lineScanner = new Scanner(fr);
@@ -182,82 +227,54 @@ Maintenance Log:
         System.out.print("Enter ending word: ");
         secondWord = r.nextLine();
 
-        System.out.println("Read from file? (y/n): ");
-        String t = r.nextLine();
-        t = t.toLowerCase();
-
-        boolean readFrom = true;
-
-        if (t.equals("y")) {
-            fr = new FileReader("EditNeighbors.txt");
-            lineScanner = new Scanner(fr);
-
-            while (lineScanner.hasNextLine()) {
-
-            }
-
-            fr.close();
-        } else if (t.equals("n")) {
-            readFrom = false;
-
-        } else {
-            throw new RuntimeException("Invalid Input");
-        }
-
         firstWord = firstWord.replaceAll(" ", "");
         secondWord = secondWord.replaceAll(" ", "");
 
         beginTime = System.currentTimeMillis();
 
-        if (!readFrom) {
-
-            if (firstWord.length() > secondWord.length()) {
-                smallestWord = secondWord;
-                biggestWord = firstWord;
-
-            } else {
-                smallestWord = firstWord;
-                biggestWord = secondWord;
-
-            }
-            if (smallestWord.length() > 5) {
-                smallBuffer = smallestWord.length() / 3;
-            }
-            if (biggestWord.length() > 7) {
-                bigBuffer = biggestWord.length() / 3;
-            }
-
-            sync o = new sync();
-
-            int smallestTargetLengthLoc = Algorithms.binarySearchFirstLength(words, smallestWord, smallBuffer);
-            startLoc = Algorithms.binarySearchFirstLength(words, smallestWord, 1);
-            o.setMapTarget(smallestTargetLengthLoc);
-            System.out.println("Binary search time (ms): " + (System.currentTimeMillis() - beginTime));
-
-            startDif = letterDifference(firstWord, secondWord);
-            smallestDifFound = startDif;
-
-            for (int i = 0; i < THREAD_NUM; i++) {
-                String name = "Thread " + i + ": ";
-                mapThread temp = new mapThread(name, o);
-                temp.start();
-            }
-            while(threadsComplete != THREAD_NUM) {
-                sleep(1);
-            }
-
-            EditNeighbors.forEach((k, v) -> { // remove elements from values that aren't mapped to avoid null pointer errors
-                for (int i = 0; i < v.size(); i++) {
-                    v.removeIf((e) -> { // i still don't understand -> like why does the code need directions? just like look over there yourself
-                        return !EditNeighbors.containsKey(e);
-                    });
-                    EditNeighbors.put(k, v);
-                }
-            });
-
-            System.out.println("Map size: " + EditNeighbors.size());
-
+        if (firstWord.length() > secondWord.length()) {
+            smallestWord = secondWord;
+            biggestWord = firstWord;
+        } else {
+            smallestWord = firstWord;
+            biggestWord = secondWord;
         }
+        if (smallestWord.length() > 5) {
+            smallBuffer = smallestWord.length() / 3;
+        }
+        if (biggestWord.length() > 7) {
+            bigBuffer = biggestWord.length() / 3;
+        }
+
+           sync o = new sync();
+
+           int smallestTargetLengthLoc = binarySearchFirstLength(smallestWord, smallBuffer);
+           startLoc = binarySearchFirstLength(smallestWord, 1);
+           o.setMapTarget(smallestTargetLengthLoc);
+
+           System.out.println("Binary search time (ms): " + (System.currentTimeMillis() - beginTime));
+
+           startDif = letterDifference(firstWord, secondWord);
+           smallestDifFound = startDif;
+
+           for (int i = 0; i < THREAD_NUM; i++) {
+               String name = "Thread " + i + ": ";
+               mapThread temp = new mapThread(name, o);
+               temp.start();
+           }
+
+           while(threadsComplete != THREAD_NUM) {
+               sleep(1);
+           }
+           EditNeighbors.forEach((k, v) -> { // remove elements from values that aren't mapped to avoid null pointer errors
+               for (int i = 0; i < v.size(); i++) {
+                   v.removeIf((e) -> { // i still don't understand -> like why does the code need directions? just like look over there yourself
+                       return !EditNeighbors.containsKey(e);
+                   });
+                   EditNeighbors.put(k, v);
+               }
+           });
+           System.out.println("Map size: " + EditNeighbors.size());
 
         long pathTime = System.currentTimeMillis();
 
