@@ -151,8 +151,9 @@ Maintenance Log:
 
         public void run() {
             System.out.println("Running " + threadName);
+            int target = 0;
+            ArrayList<String> neighbors = null;
             try {
-                int target;
 
                 for (int i = 0; i < words.size(); i++) {
 
@@ -166,7 +167,7 @@ Maintenance Log:
                         break;
                     }
 
-                    ArrayList<String> neighbors = new ArrayList<String>();
+                    neighbors = new ArrayList<String>();
                     for (int t = binarySearchFirstLength(x, 1); t < words.size(); t++) {
                         String temp = words.get(t);
                         if (Math.abs(temp.length() - x.length()) < 2) {
@@ -183,7 +184,7 @@ Maintenance Log:
                                     }
                                 }
                             }
-                        } else if (temp.length() > x.length() + 1){
+                        } else if (temp.length() > x.length() + 1) {
                             break;
                         }
                     }
@@ -191,7 +192,10 @@ Maintenance Log:
                 }
                 System.out.println(threadName + " total time elapsed to create map (ms): " + (System.currentTimeMillis() - beginTime));
             } catch (Exception e) {
-                System.out.println(threadName + " Error: " + e.getCause());
+                System.out.println(threadName + " Error: " + e.getCause() + " " + e);
+                System.out.println(words.get(target));
+                System.out.println(target);
+                System.out.println(neighbors);
             }
             System.out.println(threadName + " complete");
             threadsComplete++;

@@ -13,12 +13,12 @@ Maintenance Log:
 
     static float sumTo(int n)
     {
-        float temp = n;
 
-        if (n > 0) {
-            return (1/temp) + sumTo(n - 1);
+        if (n == 1) {
+            return 1;
         }
-        return 0;
+        float temp = n;
+        return (1/temp) + sumTo(n - 1);
     }
 
 

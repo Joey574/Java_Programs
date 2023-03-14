@@ -12,9 +12,16 @@ Pseudocode:
 Maintenance Log:
  */
 
-    static void writeSequence(int n)
-    {
-        if (n > 0) {
+    static void writeSequence(int n) throws Exception {
+        if (n <= 0) {
+            throw new Exception("Illegal Argument");
+        }
+
+        if (n == 1) {
+            System.out.print("1 ");
+        } else if (n == 2) {
+            System.out.print("1 1 ");
+        } else {
             if (n % 2 == 0) {
                 System.out.print(n/2 + " ");
             }
@@ -29,20 +36,19 @@ Maintenance Log:
                 System.out.print((n+1)/2 + " ");
             }
         }
-
     }
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) throws Exception {
         Scanner r = new Scanner(System.in);
 
         System.out.print("Enter input: ");
         int x = r.nextInt();
 
         if (x != 0) {
-            writeSequence(x);
-        } else {
-            System.out.print("Illegal Argument");
+            for(int i = 1; i < 11; i++) {
+                writeSequence(i);
+                System.out.print("\n");
+            }
         }
 
     }

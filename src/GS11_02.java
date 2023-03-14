@@ -13,7 +13,9 @@ Maintenance Log:
 
     static void writeNums(int i)
     {
-        if (i > 0) {
+        if (i == 1) {
+            System.out.print("1, ");
+        } else {
             writeNums(i - 1);
             System.out.print(i + ", ");
         }

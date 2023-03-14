@@ -11,20 +11,12 @@ Pseudocode:
 Maintenance Log:
  */
 
-    static int fibonacciHelper(int n)
-    {
-        if (n > 1) {
-            n = fibonacciHelper(n - 1) + fibonacciHelper(n - 2);
-        }
-        return n;
-    }
-
     static int fibonacci (int n)
     {
-        if (n > 1) {
-            n = fibonacci(n - 1) + fibonacciHelper(n - 2);
+        if (n == 0 || n == 1) {
+            return n;
         }
-        System.out.print(n + ", ");
+        n = fibonacci(n - 1) + fibonacci(n - 2);
         return n;
     }
 
@@ -36,5 +28,6 @@ Maintenance Log:
         int temp = r.nextInt();
 
         int t = fibonacci(temp);
+        System.out.println("Output: " + t);
     }
 }
