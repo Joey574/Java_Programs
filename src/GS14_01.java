@@ -231,39 +231,39 @@ Maintenance Log:
             bigBuffer = biggestWord.length() / 3;
         }
 
-           sync o = new sync();
+        sync o = new sync();
 
-           int smallestTargetLengthLoc = binarySearchFirstLength(smallestWord, smallBuffer);
-           startLoc = binarySearchFirstLength(smallestWord, 1);
-           o.setMapTarget(smallestTargetLengthLoc);
+        int smallestTargetLengthLoc = binarySearchFirstLength(smallestWord, smallBuffer);
+        startLoc = binarySearchFirstLength(smallestWord, 1);
+        o.setMapTarget(smallestTargetLengthLoc);
 
-           System.out.println("Binary search time (ms): " + (System.currentTimeMillis() - beginTime));
+        System.out.println("Binary search time (ms): " + (System.currentTimeMillis() - beginTime));
 
-           startDif = letterDifference(firstWord, secondWord);
-           smallestDifFound = startDif;
+        startDif = letterDifference(firstWord, secondWord);
+        smallestDifFound = startDif;
 
-           for (int i = 0; i < THREAD_NUM; i++) {
-               String name = "Thread " + i + ": ";
-               mapThread temp = new mapThread(name, o);
-               temp.start();
-           }
+        for (int i = 0; i < THREAD_NUM; i++) {
+            String name = "Thread " + i + ": ";
+            mapThread temp = new mapThread(name, o);
+            temp.start();
+        }
 
-           while(threadsComplete != THREAD_NUM) {
-               sleep(1);
-           }
+        while(threadsComplete != THREAD_NUM) {
+            sleep(1);
+        }
 
         EditNeighbors.forEach((k, v) -> { // remove elements from values that aren't mapped to avoid null pointer errors
-            for (int i = 0; i < v.size(); i++) {
-                v.removeIf((e) -> { // i still don't understand -> like why does the code need directions? just like look over there yourself
-                    return !EditNeighbors.containsKey(e);
-                });
-                EditNeighbors.put(k, v);
+        for (int i = 0; i < v.size(); i++) {
+            v.removeIf((e) -> { // i still don't understand -> like why does the code need directions? just like look over there yourself
+                return !EditNeighbors.containsKey(e);
+            });
+            EditNeighbors.put(k, v);
             }
         });
 
-           System.out.println("Map size: " + EditNeighbors.size());
+        System.out.println("Map size: " + EditNeighbors.size());
 
-            long pathTime = System.currentTimeMillis();
+        long pathTime = System.currentTimeMillis();
 
         if (EditNeighbors.containsKey(firstWord) && EditNeighbors.containsKey(secondWord)) { // check for if words are present in map
             ArrayList<String> path = new ArrayList<String>();
