@@ -1,5 +1,4 @@
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
@@ -17,7 +16,7 @@ Pseudocode:
 Maintenance Log:
  */
 
-    static int THREAD_NUM = 16;
+    static int THREAD_NUM = 12;
 
     static int threadsComplete = 0;
     static int startLoc;
@@ -75,9 +74,6 @@ Maintenance Log:
 
     public static boolean isEditDistance (String in1, String in2) {
         int m = in1.length(), n = in2.length();
-
-        if (Math.abs(m - n) > 1)
-            return false;
 
         int count = 0;
 
@@ -154,7 +150,6 @@ Maintenance Log:
             int target = 0;
             ArrayList<String> neighbors = null;
             try {
-
                 for (int i = 0; i < words.size(); i++) {
 
                     synchronized (obj) {
@@ -168,34 +163,20 @@ Maintenance Log:
                     }
 
                     neighbors = new ArrayList<String>();
-                    for (int t = binarySearchFirstLength(x, 1); t < words.size(); t++) {
-                        String temp = words.get(t);
-                        if (Math.abs(temp.length() - x.length()) < 2) {
-                            if (!EditNeighbors.containsKey(x) || !EditNeighbors.get(x).contains(temp)) {
-                                if (isEditDistance(temp, x)) {
-                                    neighbors.add(temp);
-                                    if (EditNeighbors.containsKey(temp)) {
-                                        List<String> tempL = EditNeighbors.get(temp);
-                                        tempL.add(temp);
-                                        EditNeighbors.put(temp, tempL);
-                                    } else {
-                                        List<String> tempVal = new ArrayList<>(List.of(x));
-                                        EditNeighbors.put(temp, tempVal);
-                                    }
-                                }
-                            }
-                        } else if (temp.length() > x.length() + 1) {
+                    for (String temp : words) {
+                        if (temp.length() > x.length() + 1) {
                             break;
+                        } else if (Math.abs(temp.length() - x.length()) < 2) {
+                            if (isEditDistance(temp, x)) {
+                                neighbors.add(temp);
+                            }
                         }
                     }
                     EditNeighbors.put(x, neighbors);
                 }
                 System.out.println(threadName + " total time elapsed to create map (ms): " + (System.currentTimeMillis() - beginTime));
             } catch (Exception e) {
-                System.out.println(threadName + " Error: " + e.getCause() + " " + e);
-                System.out.println(words.get(target));
-                System.out.println(target);
-                System.out.println(neighbors);
+                System.out.println(threadName + " Error: " + e.getCause() + " :: " + e);
             }
             System.out.println(threadName + " complete");
             threadsComplete++;
@@ -270,17 +251,19 @@ Maintenance Log:
            while(threadsComplete != THREAD_NUM) {
                sleep(1);
            }
-           EditNeighbors.forEach((k, v) -> { // remove elements from values that aren't mapped to avoid null pointer errors
-               for (int i = 0; i < v.size(); i++) {
-                   v.removeIf((e) -> { // i still don't understand -> like why does the code need directions? just like look over there yourself
-                       return !EditNeighbors.containsKey(e);
-                   });
-                   EditNeighbors.put(k, v);
-               }
-           });
+
+        EditNeighbors.forEach((k, v) -> { // remove elements from values that aren't mapped to avoid null pointer errors
+            for (int i = 0; i < v.size(); i++) {
+                v.removeIf((e) -> { // i still don't understand -> like why does the code need directions? just like look over there yourself
+                    return !EditNeighbors.containsKey(e);
+                });
+                EditNeighbors.put(k, v);
+            }
+        });
+
            System.out.println("Map size: " + EditNeighbors.size());
 
-        long pathTime = System.currentTimeMillis();
+            long pathTime = System.currentTimeMillis();
 
         if (EditNeighbors.containsKey(firstWord) && EditNeighbors.containsKey(secondWord)) { // check for if words are present in map
             ArrayList<String> path = new ArrayList<String>();
@@ -305,24 +288,11 @@ Maintenance Log:
 
                 path.add(target);
 
-                //System.out.println("Examined: " + examined.size());
-                //System.out.println("Path: " + path.size());
-                //System.out.println("Target: " + target);
-                //System.out.println("Values: " + values.size());
-
-                System.out.println("Examined: " + examined);
-                System.out.println("Path: " + path);
-                System.out.println("Target: " + target);
-                System.out.println("Values: " + values);
-
                 for (int p = 0; p < values.size(); p++) { // checking for possible values we can use
                     if (!Algorithms.containsString(values.get(p), path) && !examined.contains(values.get(p))) {
                         pValues.add(values.get(p));
                     }
                 }
-
-                //System.out.println("Possible values: " + pValues.size());
-                System.out.println("Possible values: " + pValues);
 
                 if (pValues.size() > 0) { // haven't made it to end of path yet
                     smallestDifLoc = 0;
@@ -349,7 +319,6 @@ Maintenance Log:
                         target = path.get(path.size() - 1);
                     }
                 }
-                System.out.println("New target: " + target);
             }
 
             if (!complete) {
