@@ -182,13 +182,6 @@ Maintenance Log:
             System.out.println(threadName + " complete");
             threadsComplete++;
         }
-
-        public void start() {
-            if (t == null) {
-                t = new Thread(this, threadName);
-                t.start();
-            }
-        }
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
