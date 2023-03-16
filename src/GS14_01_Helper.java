@@ -26,8 +26,48 @@ Maintenance Log:
     static String secondWord;
     static String smallestWord;
     static String biggestWord;
-    static LinkedList<String> words = new LinkedList<>();
+    static List<String> words = new ArrayList<>();
     static HashMap<String, List<String>> EditNeighbors = new HashMap<String, List<String>>();
+
+    public static int binarySearchFirstLength(String target, int smallBuffer) {
+        boolean complete = false;
+
+        int out = -1;
+        int start = 0;
+        int end = words.size();
+
+        for (int i = 0; !complete; i++) {
+            int loc = (start + end) / 2;
+            if (words.get(loc).length() == target.length()) {
+                complete = true;
+                out = loc;
+            } else if (words.get(loc).length() > target.length()) {
+                end = loc;
+            } else if (words.get(loc).length() < target.length()) {
+                start = loc;
+            }
+            if (start > end || start == end) {
+                complete = true;
+                out = -loc;
+            }
+        }
+
+        while(words.get(out).length() >= target.length() - smallBuffer) {
+            if (out > 30) {
+                out -= 30;
+            } else if (out > 0){
+                out--;
+            } else {
+                return 0;
+            }
+        }
+
+        while(words.get(out).length() != target.length() - smallBuffer) {
+            out++;
+        }
+
+        return out;
+    }
 
     public static boolean isEditDistance (String in1, String in2) {
         int m = in1.length(), n = in2.length();
@@ -201,7 +241,7 @@ Maintenance Log:
 
         sync o = new sync();
 
-        smallestTargetLengthLoc = Algorithms.binarySearchFirstLength(words, smallestWord, smallBuffer);
+        smallestTargetLengthLoc = binarySearchFirstLength(smallestWord, smallBuffer);
         o.setMapTarget(smallestTargetLengthLoc);
         System.out.println("Binary search time (ms): " + (System.currentTimeMillis() - beginTime));
 

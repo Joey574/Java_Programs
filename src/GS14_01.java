@@ -29,7 +29,7 @@ Maintenance Log:
     static String secondWord;
     static String smallestWord;
     static String biggestWord;
-    static LinkedList<String> words = new LinkedList<>();
+    static List<String> words = new ArrayList<>();
     static HashMap<String, List<String>> EditNeighbors = new HashMap<String, List<String>>();
 
     public static int binarySearchFirstLength(String target, int smallBuffer) {
@@ -71,7 +71,6 @@ Maintenance Log:
 
         return out;
     }
-
     public static boolean isEditDistance (String in1, String in2) {
         int m = in1.length(), n = in2.length();
 
@@ -163,7 +162,9 @@ Maintenance Log:
                     }
 
                     neighbors = new ArrayList<String>();
-                    for (String temp : words) {
+
+                    for (int p = binarySearchFirstLength(x, 1); p < words.size(); p++) {
+                        String temp = words.get(p);
                         if (temp.length() > x.length() + 1) {
                             break;
                         } else if (Math.abs(temp.length() - x.length()) < 2) {
@@ -254,7 +255,7 @@ Maintenance Log:
 
         EditNeighbors.forEach((k, v) -> { // remove elements from values that aren't mapped to avoid null pointer errors
         for (int i = 0; i < v.size(); i++) {
-            v.removeIf((e) -> { // i still don't understand -> like why does the code need directions? just like look over there yourself
+            v.removeIf((e) -> { // I still don't understand -> like why does the code need directions? just like look over there yourself
                 return !EditNeighbors.containsKey(e);
             });
             EditNeighbors.put(k, v);
