@@ -134,7 +134,7 @@ Maintenance Log:
         }
     }
 
-    static class mapThread implements Runnable {
+    static class mapThread extends Thread {
         private final String threadName;
         private Thread t;
         final sync obj;
@@ -175,7 +175,6 @@ Maintenance Log:
                     }
                     EditNeighbors.put(x, neighbors);
                 }
-                System.out.println(threadName + " total time elapsed to create map (ms): " + (System.currentTimeMillis() - beginTime));
             } catch (Exception e) {
                 System.out.println(threadName + " Error: " + e.getCause() + " :: " + e);
             }
@@ -245,6 +244,8 @@ Maintenance Log:
         while(threadsComplete != THREAD_NUM) {
             sleep(1);
         }
+
+        System.out.println("Total time elapsed to create map (ms): " + (System.currentTimeMillis() - beginTime));
 
         EditNeighbors.forEach((k, v) -> { // remove elements from values that aren't mapped to avoid null pointer errors
         for (int i = 0; i < v.size(); i++) {
