@@ -4,7 +4,7 @@ import java.util.*;
 
 import static java.lang.Thread.sleep;
 
-public class GS14_01
+public class GS14_01_FileCreator
 {
 
 /*
@@ -19,16 +19,7 @@ Maintenance Log:
     static int THREAD_NUM = 12;
 
     static int threadsComplete = 0;
-    static int startLoc;
-    static int startDif;
-    static int smallestDifFound;
-    static int smallBuffer = 0;
-    static int bigBuffer = 0;
     static long beginTime;
-    static String firstWord;
-    static String secondWord;
-    static String smallestWord;
-    static String biggestWord;
     static List<String> words = new ArrayList<>();
     static HashMap<String, List<String>> EditNeighbors = new HashMap<String, List<String>>();
     static int [] wordLoc = new int[31];
@@ -169,10 +160,6 @@ Maintenance Log:
 
                     String x = words.get(target);
 
-                    if (x.length() > biggestWord.length() + bigBuffer) {
-                        break;
-                    }
-
                     neighbors = new ArrayList<String>();
 
                     for (int p = binarySearchFirstLength(x, 1); p < words.size(); p++) {
@@ -209,8 +196,7 @@ Maintenance Log:
         FileReader fr = new FileReader(fileName);
         Scanner lineScanner = new Scanner(fr);
 
-        while (lineScanner.hasNextLine())
-        {
+        while (lineScanner.hasNextLine()) {
             words.add(lineScanner.nextLine());
         }
 
@@ -219,40 +205,13 @@ Maintenance Log:
 
         Scanner r = new Scanner(System.in);
 
-        System.out.print("Enter starting word: ");
-        firstWord = r.nextLine();
-        System.out.print("Enter ending word: ");
-        secondWord = r.nextLine();
-
-        firstWord = firstWord.replaceAll(" ", "");
-        secondWord = secondWord.replaceAll(" ", "");
-
         beginTime = System.currentTimeMillis();
-
-        if (firstWord.length() > secondWord.length()) {
-            smallestWord = secondWord;
-            biggestWord = firstWord;
-        } else {
-            smallestWord = firstWord;
-            biggestWord = secondWord;
-        }
-        if (smallestWord.length() > 5) {
-            smallBuffer = smallestWord.length() / 3;
-        }
-        if (biggestWord.length() > 7) {
-            bigBuffer = biggestWord.length() / 3;
-        }
 
         sync o = new sync();
 
-        int smallestTargetLengthLoc = binarySearchFirstLength(smallestWord, smallBuffer);
-        startLoc = binarySearchFirstLength(smallestWord, 1);
-        o.setMapTarget(smallestTargetLengthLoc);
+        o.setMapTarget(0);
 
         System.out.println("Binary search time (ms): " + (System.currentTimeMillis() - beginTime));
-
-        startDif = letterDifference(firstWord, secondWord);
-        smallestDifFound = startDif;
 
         ArrayList<mapThread> threads = new ArrayList<>();
 
@@ -263,7 +222,7 @@ Maintenance Log:
             temp.start();
         }
 
-        while(threadsComplete != THREAD_NUM) {
+        while (threadsComplete != THREAD_NUM) {
             sleep(1);
         }
 
@@ -273,86 +232,8 @@ Maintenance Log:
 
         System.out.println("Total time elapsed to create map (ms): " + (System.currentTimeMillis() - beginTime));
 
-        EditNeighbors.forEach((k, v) -> { // remove elements from values that aren't mapped to avoid null pointer errors
-        for (int i = 0; i < v.size(); i++) {
-            v.removeIf((e) -> { // I still don't understand -> like why does the code need directions? just like look over there yourself
-                return !EditNeighbors.containsKey(e);
-            });
-            EditNeighbors.put(k, v);
-            }
-        });
-
         System.out.println("Map size: " + EditNeighbors.size());
 
-        long pathTime = System.currentTimeMillis();
-
-        if (EditNeighbors.containsKey(firstWord) && EditNeighbors.containsKey(secondWord)) { // check for if words are present in map
-            ArrayList<String> path = new ArrayList<String>();
-            Set<String> examined = new HashSet<String>();
-            String target = firstWord;
-            boolean complete = false;
-
-            for (int i = 0; !target.equals(secondWord) && !complete; i++) { // looping until either path found or nowhere left to go
-                ArrayList<String> values = new ArrayList<String>(EditNeighbors.get(target));
-                ArrayList<String> pValues = new ArrayList<>();
-                int smallestDif = letterDifference(target, secondWord);
-                int smallestDifLoc = -1;
-
-                if (examined.contains(target)) { // double failsafe
-                    if (path.size() < 2) { // nowhere else to go
-                        complete = true;
-                    } else {
-                        path.remove(path.size() - 1);
-                        target = path.get(path.size() - 1);
-                    }
-                }
-
-                path.add(target);
-
-                for (int p = 0; p < values.size(); p++) { // checking for possible values we can use
-                    if (!Algorithms.containsString(values.get(p), path) && !examined.contains(values.get(p))) {
-                        pValues.add(values.get(p));
-                    }
-                }
-
-                if (pValues.size() > 0) { // haven't made it to end of path yet
-                    smallestDifLoc = 0;
-                    smallestDif = letterDifference(pValues.get(0), secondWord);
-
-                    for (int x = 0; x < pValues.size(); x++) { // checking which possible value will get us the closest to end
-                        if (letterDifference(pValues.get(x), secondWord) < smallestDif) {
-                            smallestDifLoc = x;
-                            smallestDif = letterDifference(pValues.get(x), secondWord);
-                        }
-                    }
-
-                    target = pValues.get(smallestDifLoc);
-                    if (secondWord.equals(target)) { // word found
-                        path.add(target);
-                    }
-
-                } else { // no possible values found
-                    examined.add(target);
-                    if (path.size() < 2) { // nowhere else to go
-                        complete = true;
-                    } else {
-                        path.remove(path.size() - 1);
-                        target = path.get(path.size() - 1);
-                    }
-                }
-            }
-
-            if (!complete) {
-                System.out.println("Path found: " + path);
-            } else {
-                System.out.println("No path found: " + path);
-            }
-
-            System.out.println("Total time elapsed to find path (ms): " + (System.currentTimeMillis() - pathTime));
-            System.out.println("Total time elapsed (ms): " + (System.currentTimeMillis() - beginTime));
-
-        } else {
-            throw new RuntimeException("Word not found in map and or dictionary");
-        }
     }
 }
+
