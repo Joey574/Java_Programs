@@ -263,8 +263,8 @@ Maintenance Log:
             temp.start();
         }
 
-        while(threadsComplete != THREAD_NUM) {
-            sleep(1);
+        for (Thread thread : threads) {
+            thread.join();
         }
 
         for (int i = 0; i < THREAD_NUM; i++) {
