@@ -156,7 +156,7 @@ Maintenance Log:
         }
 
         public void run() {
-            System.out.println("Running " + threadName);
+            System.out.println(threadName + "Running");
 
             int target = 0;
             ArrayList<String> neighbors;
@@ -179,7 +179,7 @@ Maintenance Log:
                         String temp = words.get(p);
                         if (temp.length() > x.length() + 1) {
                             break;
-                        } else if (Math.abs(temp.length() - x.length()) < 2) {
+                        } else {
                             if (isEditDistance(temp, x)) {
                                 neighbors.add(temp);
                             }
@@ -205,6 +205,7 @@ Maintenance Log:
         //String fileName = "dictionaryMonkeyBusiness.txt";
 
         Arrays.fill(wordLoc, -1);
+        wordLoc[1] = 0;
 
         FileReader fr = new FileReader(fileName);
         Scanner lineScanner = new Scanner(fr);
@@ -246,13 +247,9 @@ Maintenance Log:
         sync o = new sync();
 
         int smallestTargetLengthLoc = binarySearchFirstLength(smallestWord, smallBuffer);
-        startLoc = binarySearchFirstLength(smallestWord, 1);
         o.setMapTarget(smallestTargetLengthLoc);
 
         System.out.println("Binary search time (ms): " + (System.currentTimeMillis() - beginTime));
-
-        startDif = letterDifference(firstWord, secondWord);
-        smallestDifFound = startDif;
 
         ArrayList<mapThread> threads = new ArrayList<>();
 
@@ -290,9 +287,9 @@ Maintenance Log:
             ArrayList<String> path = new ArrayList<String>();
             Set<String> examined = new HashSet<String>();
             String target = firstWord;
-            boolean complete = false;
+            boolean failed = false;
 
-            for (int i = 0; !target.equals(secondWord) && !complete; i++) { // looping until either path found or nowhere left to go
+            for (int i = 0; !target.equals(secondWord) && !failed; i++) { // looping until either path found or nowhere left to go
                 ArrayList<String> values = new ArrayList<String>(EditNeighbors.get(target));
                 ArrayList<String> pValues = new ArrayList<>();
                 int smallestDif = letterDifference(target, secondWord);
@@ -334,7 +331,7 @@ Maintenance Log:
                 } else { // no possible values found
                     examined.add(target);
                     if (path.size() < 2) { // nowhere else to go
-                        complete = true;
+                        failed = true;
                     } else {
                         path.remove(path.size() - 1);
                         target = path.get(path.size() - 1);
@@ -342,7 +339,7 @@ Maintenance Log:
                 }
             }
 
-            if (!complete) {
+            if (!failed) {
                 System.out.println("Path found: " + path);
             } else {
                 System.out.println("No path found: " + path);
