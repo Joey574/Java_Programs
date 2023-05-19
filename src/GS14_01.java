@@ -18,10 +18,7 @@ Maintenance Log:
 
     static int THREAD_NUM = 12;
 
-    static int threadsComplete = 0;
-    static int startLoc;
-    static int startDif;
-    static int smallestDifFound;
+    static int mapTarget;
     static int smallBuffer = 0;
     static int bigBuffer = 0;
     static long beginTime;
@@ -31,7 +28,7 @@ Maintenance Log:
     static String biggestWord;
     static List<String> words = new ArrayList<>();
     static HashMap<String, List<String>> EditNeighbors = new HashMap<String, List<String>>();
-    static int [] wordLoc = new int[31];
+    static int [] wordLoc = new int[32];
 
     public static int binarySearchFirstLength(String target, int smallBuffer) {
 
@@ -129,29 +126,20 @@ Maintenance Log:
         return t;
     }
 
-    public static class sync {
-        static private int mapTarget = 0;
-
-        static int getTarget() {
-            mapTarget++;
-            return mapTarget - 1;
-        }
-
-        static void setMapTarget(int i) {
-            mapTarget = i;
-        }
+    public static int getTarget()
+    {
+        mapTarget++;
+        return mapTarget - 1;
     }
 
     static class mapThread extends Thread {
         private final String threadName;
         private final HashMap<String, List<String>> EditNeighborsLoc = new HashMap<String, List<String>>();
         private Thread t;
-        private int threadID;
-        final sync obj;
+        final Object obj;
 
-        mapThread(String name, int id, sync o) {
+        mapThread(String name, Object o) {
             threadName = name;
-            threadID = id;
             obj = o;
         }
 
@@ -164,7 +152,7 @@ Maintenance Log:
                 for (int i = 0; i < words.size(); i++) {
 
                     synchronized (obj) {
-                        target = obj.getTarget();
+                        target = getTarget();
                     }
 
                     String x = words.get(target);
@@ -191,7 +179,6 @@ Maintenance Log:
                 System.out.println(threadName + " Error: " + e.getCause() + " :: " + e);
             }
             System.out.println(threadName + " complete");
-            threadsComplete++;
         }
 
         public HashMap<String, List<String>> getEditNeighborsLoc()
@@ -203,6 +190,8 @@ Maintenance Log:
     public static void main(String[] args) throws IOException, InterruptedException {
         String fileName = "dictionarySortedLength.txt";
         //String fileName = "dictionaryMonkeyBusiness.txt";
+
+        Object sync = new Object();
 
         Arrays.fill(wordLoc, -1);
         wordLoc[1] = 0;
@@ -244,10 +233,8 @@ Maintenance Log:
             bigBuffer = biggestWord.length() / 3;
         }
 
-        sync o = new sync();
 
-        int smallestTargetLengthLoc = binarySearchFirstLength(smallestWord, smallBuffer);
-        o.setMapTarget(smallestTargetLengthLoc);
+        mapTarget = binarySearchFirstLength(smallestWord, smallBuffer);
 
         System.out.println("Binary search time (ms): " + (System.currentTimeMillis() - beginTime));
 
@@ -255,7 +242,7 @@ Maintenance Log:
 
         for (int i = 0; i < THREAD_NUM; i++) {
             String name = "Thread " + i + ": ";
-            mapThread temp = new mapThread(name, i, o);
+            mapThread temp = new mapThread(name, sync);
             threads.add(temp);
             temp.start();
         }
@@ -297,7 +284,7 @@ Maintenance Log:
 
                 if (examined.contains(target)) { // double failsafe
                     if (path.size() < 2) { // nowhere else to go
-                        complete = true;
+                        failed = true;
                     } else {
                         path.remove(path.size() - 1);
                         target = path.get(path.size() - 1);

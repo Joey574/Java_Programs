@@ -1,4 +1,5 @@
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
@@ -22,7 +23,7 @@ Maintenance Log:
     static long beginTime;
     static List<String> words = new ArrayList<>();
     static HashMap<String, List<String>> EditNeighbors = new HashMap<String, List<String>>();
-    static int [] wordLoc = new int[31];
+    static int [] wordLoc = new int[32];
 
     public static int binarySearchFirstLength(String target, int smallBuffer) {
 
@@ -101,24 +102,6 @@ Maintenance Log:
         }
         return count == 1;
     }
-    public static int letterDifference(String i1, String i2) {
-        int t = 0;
-        int i = 0;
-
-        for (i = 0; i < i1.length() && i < i2.length(); i++) {
-            if (i1.charAt(i) != i2.charAt(i)) {
-                t++;
-            }
-        }
-
-        if (i < i1.length()) {
-            t += i1.length() - i;
-        } else if (i < i2.length()) {
-            t += i2.length() - i;
-        }
-
-        return t;
-    }
 
     public static class sync {
         static private int mapTarget = 0;
@@ -163,7 +146,13 @@ Maintenance Log:
                     neighbors = new ArrayList<String>();
 
                     for (int p = binarySearchFirstLength(x, 1); p < words.size(); p++) {
-                        String temp = words.get(p);
+                        String temp = "";
+                        try {
+                        temp = words.get(p);
+                        } catch (Exception e) {
+                        System.out.println("P out of bounds");
+                        }
+
                         if (temp.length() > x.length() + 1) {
                             break;
                         } else if (Math.abs(temp.length() - x.length()) < 2) {
@@ -233,6 +222,18 @@ Maintenance Log:
         System.out.println("Total time elapsed to create map (ms): " + (System.currentTimeMillis() - beginTime));
 
         System.out.println("Map size: " + EditNeighbors.size());
+
+        FileWriter fw = new FileWriter("EditNeighbors.txt");
+
+        EditNeighbors.forEach((k, v) -> {
+            try {
+                if (v != null) {
+                    fw.write(k + ":\n" + v + "\n");
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
     }
 }
