@@ -1,10 +1,11 @@
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static java.lang.Thread.sleep;
 
-public class GS14_01
+public class GS14_01_Graphing_MultiThread
 {
 
 /*
@@ -28,6 +29,7 @@ Maintenance Log:
     static String biggestWord;
     static List<String> words = new ArrayList<>();
     static HashMap<String, List<String>> EditNeighbors = new HashMap<String, List<String>>();
+    static Map<String, Boolean> isMapped = new ConcurrentHashMap<String, Boolean>();
     static int [] wordLoc = new int[32];
 
     public static int binarySearchFirstLength(String target) {
@@ -163,7 +165,7 @@ Maintenance Log:
 
                     neighbors = new ArrayList<String>();
 
-                    for (int p = binarySearchFirstLength((x.substring(1))); p < words.size(); p++) {
+                    for (int p = binarySearchFirstLength(x.substring(1)); p < words.size(); p++) {
                         String temp = words.get(p);
                         if (temp.length() > x.length() + 1) {
                             break;
@@ -205,6 +207,7 @@ Maintenance Log:
         }
 
         fr.close();
+
         System.out.println("File closed");
 
         Scanner r = new Scanner(System.in);
@@ -243,31 +246,7 @@ Maintenance Log:
             String name = "Thread " + i + ": ";
             mapThread temp = new mapThread(name, sync);
             threads.add(temp);
-            temp.start();
         }
-
-        for (Thread thread : threads) {
-            thread.join();
-        }
-
-        for (int i = 0; i < THREAD_NUM; i++) {
-            EditNeighbors.putAll(threads.get(i).getEditNeighborsLoc());
-        }
-
-        System.out.println("Total time elapsed to create map (ms): " + (System.currentTimeMillis() - beginTime));
-
-        EditNeighbors.forEach((k, v) -> { // remove elements from values that aren't mapped to avoid null pointer errors
-        for (int i = 0; i < v.size(); i++) {
-            v.removeIf((e) -> { // I still don't understand -> like why does the code need directions? just like look over there yourself
-                return !EditNeighbors.containsKey(e);
-            });
-            EditNeighbors.put(k, v);
-            }
-        });
-
-        System.out.println("Map size: " + EditNeighbors.size());
-
-        long pathTime = System.currentTimeMillis();
 
         if (EditNeighbors.containsKey(firstWord) && EditNeighbors.containsKey(secondWord)) { // check for if words are present in map
             ArrayList<String> path = new ArrayList<String>();
@@ -331,9 +310,9 @@ Maintenance Log:
                 System.out.println("No path found: " + path);
             }
 
-            System.out.println("Total time elapsed to find path (ms): " + (System.currentTimeMillis() - pathTime));
             System.out.println("Total time elapsed (ms): " + (System.currentTimeMillis() - beginTime));
-            System.out.println("Examined size: " + examined.size());
+            System.out.println("Map size: " + EditNeighbors.size());
+
 
         } else {
             throw new RuntimeException("Word not found in map and or dictionary");
