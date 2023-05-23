@@ -131,8 +131,7 @@ Maintenance Log:
 }
 
     public static void findNeighbors(String target) {
-        ArrayList<String> neighbors;
-        neighbors = new ArrayList<String>();
+        ArrayList<String> neighbors = new ArrayList<>();
 
         for (int p = binarySearchFirstLength(target, 1); p < words.size(); p++) {
             String temp = words.get(p);

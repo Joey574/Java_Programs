@@ -48,21 +48,37 @@ Maintenance Log:
         FileReader fr = new FileReader(fileName);
         Scanner lineScanner = new Scanner(fr);
 
-        String temp;
-        List<String> tempValues = new ArrayList<>();
-
         while (lineScanner.hasNextLine())
         {
             words.add(lineScanner.nextLine());
-
-            if (words.get(words.size() - 1).contains(":")) {
-                temp = words.get(words.size() - 1);
-            }
-
         }
 
         fr.close();
         System.out.println("File closed");
+
+        String temp = "";
+        List<String> tempValues = new ArrayList<>();
+        int beginLoc = 1;
+        int endLoc = 0;
+
+        for (int i = 0; i < words.size(); i++) { // iterating over entire words array
+            if (words.get(i).contains(":")) { // find if word is key
+                temp = words.get(i).replace(":", ""); // assign temp key
+            } else if (words.get(i).contains("[")) { // find if word is value
+                beginLoc = 1;
+                endLoc = 0;
+                for (int x = 1; x < words.get(i).length() - 1; x++) { // iterate over words.get(i) length
+                    if (words.get(i).charAt(x) == ',' || words.get(i).charAt(x) == ']') { // comma-delimited words
+                        endLoc = x;
+                        tempValues.add(words.get(i).substring(beginLoc, endLoc));
+                        beginLoc = x + 2; // accommodate for , and space after
+                    }
+                }
+            }
+            EditNeighbors.put(temp, tempValues);
+        }
+
+        System.out.println("EditNeighbors built\nMap size: " + EditNeighbors.size());
 
         Scanner r = new Scanner(System.in);
 
@@ -75,8 +91,6 @@ Maintenance Log:
         secondWord = secondWord.replaceAll(" ", "");
 
         beginTime = System.currentTimeMillis();
-
-        System.out.println("Binary search time (ms): " + (System.currentTimeMillis() - beginTime));
 
         if (EditNeighbors.containsKey(firstWord) && EditNeighbors.containsKey(secondWord)) { // check for if words are present in map
             ArrayList<String> path = new ArrayList<String>();

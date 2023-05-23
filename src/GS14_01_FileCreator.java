@@ -200,8 +200,6 @@ Maintenance Log:
 
         o.setMapTarget(0);
 
-        System.out.println("Binary search time (ms): " + (System.currentTimeMillis() - beginTime));
-
         ArrayList<mapThread> threads = new ArrayList<>();
 
         for (int i = 0; i < THREAD_NUM; i++) {
@@ -211,8 +209,8 @@ Maintenance Log:
             temp.start();
         }
 
-        while (threadsComplete != THREAD_NUM) {
-            sleep(1);
+        for (Thread thread : threads) {
+            thread.join();
         }
 
         for (int i = 0; i < THREAD_NUM; i++) {
@@ -220,14 +218,13 @@ Maintenance Log:
         }
 
         System.out.println("Total time elapsed to create map (ms): " + (System.currentTimeMillis() - beginTime));
-
         System.out.println("Map size: " + EditNeighbors.size());
 
         FileWriter fw = new FileWriter("EditNeighbors.txt");
 
         EditNeighbors.forEach((k, v) -> {
             try {
-                if (v != null) {
+                if (v.size() > 0) {
                     fw.write(k + ":\n" + v + "\n");
                 }
             } catch (IOException e) {

@@ -10,6 +10,7 @@ dig
 dil
 dog
 dot
+hog
 doge
 dote
 cines

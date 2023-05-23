@@ -7,8 +7,9 @@
     <list default="true" id="f12e8b23-4312-4ae3-9faf-a14d684514af" name="Changes" comment="3/15/23">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EditNeighbors.txt" beforeDir="false" afterPath="$PROJECT_DIR$/EditNeighbors.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GS14_01.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GS14_01.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GS14_01_Alt.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GS14_01_FileReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dictionaryMonkeyBusiness.txt" beforeDir="false" afterPath="$PROJECT_DIR$/dictionaryMonkeyBusiness.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GS14_01_FileCreator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GS14_01_FileCreator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GS14_01_FileReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GS14_01_FileReader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GS14_01_Graphing.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GS14_01_Graphing.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
