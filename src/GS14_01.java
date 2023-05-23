@@ -334,7 +334,6 @@ Maintenance Log:
             System.out.println("Total time elapsed to find path (ms): " + (System.currentTimeMillis() - pathTime));
             System.out.println("Total time elapsed (ms): " + (System.currentTimeMillis() - beginTime));
             System.out.println("Examined size: " + examined.size());
-
         } else {
             throw new RuntimeException("Word not found in map and or dictionary");
         }
