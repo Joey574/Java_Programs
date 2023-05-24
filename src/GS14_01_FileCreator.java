@@ -2,6 +2,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.lang.Thread.sleep;
 
@@ -180,6 +181,8 @@ Maintenance Log:
         String fileName = "dictionarySortedLength.txt";
         //String fileName = "dictionaryMonkeyBusiness.txt";
 
+        AtomicInteger finalOut = new AtomicInteger();
+
         Arrays.fill(wordLoc, -1);
 
         FileReader fr = new FileReader(fileName);
@@ -226,12 +229,14 @@ Maintenance Log:
             try {
                 if (v.size() > 0) {
                     fw.write(k + ":\n" + v + "\n");
+                    finalOut.getAndIncrement();
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         });
-
+        fw.close();
+        System.out.println("Final Map Size: " + finalOut);
     }
 }
 

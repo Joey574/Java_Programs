@@ -62,12 +62,13 @@ Maintenance Log:
         int endLoc = 0;
 
         for (int i = 0; i < words.size(); i++) { // iterating over entire words array
+            tempValues = new ArrayList<>();
             if (words.get(i).contains(":")) { // find if word is key
                 temp = words.get(i).replace(":", ""); // assign temp key
             } else if (words.get(i).contains("[")) { // find if word is value
                 beginLoc = 1;
                 endLoc = 0;
-                for (int x = 1; x < words.get(i).length() - 1; x++) { // iterate over words.get(i) length
+                for (int x = 1; x < words.get(i).length(); x++) { // iterate over words.get(i) length
                     if (words.get(i).charAt(x) == ',' || words.get(i).charAt(x) == ']') { // comma-delimited words
                         endLoc = x;
                         tempValues.add(words.get(i).substring(beginLoc, endLoc));
@@ -96,9 +97,9 @@ Maintenance Log:
             ArrayList<String> path = new ArrayList<String>();
             Set<String> examined = new HashSet<String>();
             String target = firstWord;
-            boolean complete = false;
+            boolean failed = false;
 
-            for (int i = 0; !target.equals(secondWord) && !complete; i++) { // looping until either path found or nowhere left to go
+            for (int i = 0; !target.equals(secondWord) && !failed; i++) { // looping until either path found or nowhere left to go
                 ArrayList<String> values = new ArrayList<String>(EditNeighbors.get(target));
                 ArrayList<String> pValues = new ArrayList<>();
                 int smallestDif = letterDifference(target, secondWord);
@@ -106,7 +107,7 @@ Maintenance Log:
 
                 if (examined.contains(target)) { // double failsafe
                     if (path.size() < 2) { // nowhere else to go
-                        complete = true;
+                        failed = true;
                     } else {
                         path.remove(path.size() - 1);
                         target = path.get(path.size() - 1);
@@ -140,7 +141,7 @@ Maintenance Log:
                 } else { // no possible values found
                     examined.add(target);
                     if (path.size() < 2) { // nowhere else to go
-                        complete = true;
+                        failed = true;
                     } else {
                         path.remove(path.size() - 1);
                         target = path.get(path.size() - 1);
@@ -148,13 +149,12 @@ Maintenance Log:
                 }
             }
 
-            if (!complete) {
+            if (!failed) {
                 System.out.println("Path found: " + path);
             } else {
                 System.out.println("No path found: " + path);
             }
             System.out.println("Total time elapsed (ms): " + (System.currentTimeMillis() - beginTime));
-            System.out.println("Map Size: " + EditNeighbors.size());
             System.out.println("Examined size: " + examined.size());
         } else {
             throw new RuntimeException("Word not found in map and or dictionary");
