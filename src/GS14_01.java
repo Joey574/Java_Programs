@@ -335,6 +335,7 @@ Maintenance Log:
             System.out.println("Total time elapsed (ms): " + (System.currentTimeMillis() - beginTime));
             System.out.println("Examined size: " + examined.size());
         } else {
+            System.out.println("Time to error (ms): " + (System.currentTimeMillis() - beginTime));
             throw new RuntimeException("Word not found in map and or dictionary");
         }
     }

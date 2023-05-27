@@ -69,7 +69,7 @@ Maintenance Log:
                 beginLoc = 1;
                 endLoc = 0;
                 for (int x = 1; x < words.get(i).length(); x++) { // iterate over words.get(i) length
-                    if (words.get(i).charAt(x) == ',' || words.get(i).charAt(x) == ']') { // comma-delimited words
+                    if (words.get(i).charAt(x) == ',' || words.get(i).charAt(x) == ']') { // comma-delimited words with bracket at end
                         endLoc = x;
                         tempValues.add(words.get(i).substring(beginLoc, endLoc));
                         beginLoc = x + 2; // accommodate for , and space after
