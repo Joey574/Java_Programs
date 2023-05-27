@@ -203,7 +203,7 @@ Maintenance Log:
             EditNeighborsLoc.put(target, neighbors);
         }
 
-        private void createHelperThread(String target) {
+        private void createHelperThread(String target) { // wont work if thread count reached, it will still increment
             if (currentThreads.getAndIncrement() < MAX_THREADS) {
                 HelperThread temp = new HelperThread(threadName + "-1", target, mainThreads.get(loc));
                 temp.start();
