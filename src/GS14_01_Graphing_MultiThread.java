@@ -235,12 +235,9 @@ Maintenance Log:
         public void run() {
             try {
                 ArrayList<String> neighbors = new ArrayList<>();
-
-                for (int p = binarySearchFirstLength(target.substring(1)); p < words.size(); p++) {
-                    String temp = words.get(p);
-                    if (temp.length() > target.length() + 1) {
-                        break;
-                    } else if (isEditDistance(temp, target)) {
+                    for (int p = binarySearchFirstLength(target.substring(1)); words.get(p).length() < target.length() + 1; p++) {
+                        String temp = words.get(p);
+                    if (isEditDistance(temp, target)) {
                         neighbors.add(temp);
                     }
                 }
