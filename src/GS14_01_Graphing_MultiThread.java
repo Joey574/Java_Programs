@@ -28,6 +28,8 @@ Maintenance Log:
     static ArrayList<String> words = new ArrayList<>();
     static int [] wordLoc = new int[32];
     static ArrayList<MainThread> mainThreads = new ArrayList<>();
+    static CoordinatorThread coordinatorThread;
+    static List<String> mainPath = new ArrayList<>();
 
     public static int binarySearchFirstLength(String target) {
         if (wordLoc[target.length()] != -1)
@@ -107,6 +109,25 @@ Maintenance Log:
         return count == 1;
     }
 
+    public static int letterDifference(String i1, String i2) {
+        int t = 0;
+        int i = 0;
+
+        for (i = 0; i < i1.length() && i < i2.length(); i++) {
+            if (i1.charAt(i) != i2.charAt(i)) {
+                t++;
+            }
+        }
+
+        if (i < i1.length()) {
+            t += i1.length() - i;
+        } else if (i < i2.length()) {
+            t += i2.length() - i;
+        }
+
+        return t;
+    }
+
     public static void main(String[] args) throws IOException, InterruptedException {
         String fileName = "dictionarySortedLength.txt";
         //String fileName = "dictionaryMonkeyBusiness.txt";
@@ -149,15 +170,55 @@ Maintenance Log:
 
         mainThreads.add(new MainThread(firstWord, secondWord, "T1", 0, sync));
         mainThreads.add(new MainThread(secondWord, firstWord, "T2", 1, sync));
+        coordinatorThread = new CoordinatorThread();
 
-        currentThreads.set(2);
+        currentThreads.set(3);
         mainThreads.get(0).start();
         mainThreads.get(1).start();
+        coordinatorThread.start();
 
-        for (Thread thread : mainThreads) {
-            thread.join();
+        coordinatorThread.join();
+
+        if (mainPath.size() > 0) {
+            System.out.println("Path found: " + mainPath);
+        } else {
+            System.out.println("No path found");
         }
 
+        System.out.println("Total time elapsed (ms): " + (System.currentTimeMillis() - beginTime));
+
+    }
+
+    public static class CoordinatorThread extends Thread
+    {
+        private List<String> pathOne = new ArrayList<>();
+        private List<String> pathTwo = new ArrayList<>();
+        public void run() {
+            while(true) {
+                pathOne = mainThreads.get(0).getPath();
+                pathTwo = mainThreads.get(1).getPath();
+                for (int i = 0; i < pathTwo.size(); i++) {
+                    if (pathOne.contains(pathTwo.get(i))) {
+                        try {
+                            mainThreads.get(0).interrupt();
+                            mainThreads.get(1).interrupt();
+                        } catch (Exception e) {
+                            System.out.println("Error interrupting threads: " + e.getCause() + " :: " + e);
+                        }
+
+                        pathTwo.remove(pathTwo.size() - 1);
+                        mainPath.addAll(pathOne);
+
+                        for (int x = pathTwo.size() - 1; x > 0; x--) {
+                            mainPath.add(pathTwo.get(x));
+                        }
+
+                        break;
+
+                    }
+                }
+            }
+        }
     }
 
     public static class MainThread extends Thread
@@ -168,6 +229,7 @@ Maintenance Log:
         private int loc;
         private Object x;
         private ConcurrentHashMap<String, List<String>> EditNeighborsLoc = new ConcurrentHashMap<>();
+        private List<String> path = new ArrayList<>();
 
         MainThread(String firstWord, String secondWord, String threadName, int loc, Object x) {
             this.firstWord = firstWord;
@@ -179,14 +241,63 @@ Maintenance Log:
 
         public void run() {
             try {
+                boolean failed = false;
+                String target = firstWord;
+                Set<String> examined = new HashSet<String>();
+                while (!target.equals(secondWord) && !failed) { // looping until either path found or nowhere left to go
+                    findNeighbors(target);
+                    ArrayList<String> values = new ArrayList<String>(EditNeighborsLoc.get(target));
+                    ArrayList<String> pValues = new ArrayList<>();
+                    ArrayList<Integer> difs = new ArrayList<>();
+
+                    if (examined.contains(target)) { // double failsafe
+                        if (path.size() < 2) { // nowhere else to go
+                            failed = true;
+                        } else {
+                            path.remove(path.size() - 1);
+                            target = path.get(path.size() - 1);
+                        }
+                    }
+
+                    path.add(target);
+
+                    for (int p = 0; p < values.size(); p++) { // checking for possible values we can use
+                        if (!Algorithms.containsString(values.get(p), path) && !examined.contains(values.get(p))) {
+                            pValues.add(values.get(p));
+                        }
+                    }
+
+                    if (pValues.size() > 0) { // haven't made it to end of path yet
+
+                        difs = new ArrayList<>();
+
+                        for (int x = 0; x < pValues.size(); x++) { // checking which possible value will get us the closest to end
+                            difs.add(letterDifference(pValues.get(x), secondWord));
+                        }
+
+                        difs.forEach((v) -> {
+
+                        });
+
+                        target = pValues.get(smallestDifLoc);
+
+                        if (secondWord.equals(target)) { // word found
+                            path.add(target);
+                        }
+                    } else { // no possible values found
+                        examined.add(target);
+                        if (path.size() < 2) { // nowhere else to go
+                            failed = true;
+                        } else {
+                            path.remove(path.size() - 1);
+                            target = path.get(path.size() - 1);
+                        }
+                    }
+                }
 
             } catch (Exception e) {
                 System.out.println(threadName + " error: " + e.getCause() + " :: " + e);
             }
-        }
-
-        private void pathForward() {
-
         }
 
         private void findNeighbors(String target) {
@@ -203,8 +314,9 @@ Maintenance Log:
             EditNeighborsLoc.put(target, neighbors);
         }
 
-        private void createHelperThread(String target) { // wont work if thread count reached, it will still increment
-            if (currentThreads.getAndIncrement() < MAX_THREADS) {
+        private void createHelperThread(String target) {
+            if (currentThreads.get() < MAX_THREADS) {
+                currentThreads.incrementAndGet();
                 HelperThread temp = new HelperThread(threadName + "-1", target, mainThreads.get(loc));
                 temp.start();
             }
@@ -216,6 +328,9 @@ Maintenance Log:
 
         public ConcurrentHashMap<String, List<String>> getMap() {
             return EditNeighborsLoc;
+        }
+        public List<String> getPath() {
+            return path;
         }
     }
 
@@ -246,6 +361,7 @@ Maintenance Log:
             } catch (Exception e) {
                 System.out.println(threadName + " error: " + e.getCause() + " :: " + e);
             }
+            currentThreads.getAndDecrement();
         }
     }
 }
