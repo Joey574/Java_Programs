@@ -279,6 +279,7 @@ Maintenance Log:
                             if (mainThreads.get(otherLoc).getPath().contains(values.get(p))) { // word already pathed by other thread
                                 System.out.println(threadName + ": Word found in other path");
                                 complete = true;
+                                break;
                             }
                         }
                     }
