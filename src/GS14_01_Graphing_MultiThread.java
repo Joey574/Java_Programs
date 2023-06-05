@@ -30,7 +30,7 @@ Maintenance Log:
     static ArrayList<MainThread> mainThreads = new ArrayList<>();
     static CoordinatorThread coordinatorThread;
     static List<String> mainPath = new ArrayList<>();
-    static boolean complete;
+    static boolean threadsComplete;
 
     public static int binarySearchFirstLength(String target) {
         if (wordLoc[target.length()] != -1)
@@ -111,22 +111,23 @@ Maintenance Log:
     }
 
     public static int letterDifference(String i1, String i2) {
-        int t = 0;
-        int i = 0;
+        int diff = 0;
+        int idx = 0;
 
-        for (i = 0; i < i1.length() && i < i2.length(); i++) {
-            if (i1.charAt(i) != i2.charAt(i)) {
-                t++;
+        while (idx < i1.length() && idx < i2.length()) {
+            if (i1.charAt(idx) != i2.charAt(idx)) {
+                diff++;
             }
+            idx++;
         }
 
-        if (i < i1.length()) {
-            t += i1.length() - i;
-        } else if (i < i2.length()) {
-            t += i2.length() - i;
+        if (idx < i1.length()) {
+            diff += i1.length() - idx;
+        } else if (idx < i2.length()) {
+            diff += i2.length() - idx;
         }
 
-        return t;
+        return diff;
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -193,13 +194,13 @@ Maintenance Log:
 
     public static class CoordinatorThread extends Thread
     {
-        private List<String> pathOne = new ArrayList<>();
-        private List<String> pathTwo = new ArrayList<>();
+        private LinkedList<String> pathOne = new LinkedList<>();
+        private LinkedList<String> pathTwo = new LinkedList<>();
         private String threadName = "Coordinator";
         public void run() {
             System.out.println(threadName + ": Running");
             while(true) {
-                if (complete) {
+                if (threadsComplete) { // change to wait / notify methods later
 
                     pathOne = mainThreads.get(0).getPath();
                     pathTwo = mainThreads.get(1).getPath();
@@ -254,8 +255,8 @@ Maintenance Log:
                 System.out.println(threadName + ": Running");
                 boolean failed = false;
                 String target = firstWordT;
-                Set<String> examined = new HashSet<String>();
-                while (!target.equals(secondWordT) && !failed && !complete) { // looping until either path found or nowhere left to go
+                HashSet<String> examined = new HashSet<String>();
+                while (!target.equals(secondWordT) && !failed && !threadsComplete) { // looping until either path found or nowhere left to go
                     findNeighbors(target);
                     ArrayList<String> values = new ArrayList<String>(EditNeighborsLoc.get(target));
                     ArrayList<String> pValues = new ArrayList<>();
@@ -278,7 +279,7 @@ Maintenance Log:
                             pValues.add(values.get(p));
                             if (mainThreads.get(otherLoc).getPath().contains(values.get(p))) { // word already pathed by other thread
                                 System.out.println(threadName + ": Word found in other path");
-                                complete = true;
+                                threadsComplete = true;
                                 break;
                             }
                         }
