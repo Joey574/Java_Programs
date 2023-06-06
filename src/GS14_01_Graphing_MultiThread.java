@@ -28,7 +28,6 @@ Maintenance Log:
     static ArrayList<String> words = new ArrayList<>();
     static int [] wordLoc = new int[32];
     static ArrayList<MainThread> mainThreads = new ArrayList<>();
-    static CoordinatorThread coordinatorThread;
     static List<String> mainPath = new ArrayList<>();
     static boolean threadsComplete;
 
@@ -170,15 +169,46 @@ Maintenance Log:
 
         mainThreads.add(new MainThread(firstWord, secondWord, "T1", 0, 1));
         mainThreads.add(new MainThread(secondWord, firstWord, "T2", 1, 0));
-        coordinatorThread = new CoordinatorThread();
 
-        currentThreads.set(3);
+        currentThreads.set(2);
         mainThreads.get(0).start();
         mainThreads.get(1).start();
-        coordinatorThread.start();
 
-        coordinatorThread.join();
-        System.out.println("Main: Coordinator thread joined");
+        for(Thread thread : mainThreads) {
+            thread.join();
+        }
+        System.out.println("Main: Threads joined");
+
+        List<String> pathOne;
+        List<String> pathTwo;
+
+        pathOne = mainThreads.get(0).getPath();
+        pathTwo = mainThreads.get(1).getPath();
+
+        System.out.println("T1: Examined: " + mainThreads.get(0).getExamined());
+        System.out.println("T2: Examined: " + mainThreads.get(1).getExamined());
+
+        System.out.println("Main: Path found");
+        System.out.println("PathOne: " + pathOne);
+        System.out.println("PathTwo: " + pathTwo);
+
+        if (pathOne.contains(firstWord) && pathOne.contains(secondWord)) {
+            mainPath.addAll(pathOne);
+            System.out.println("Main: T2 did not merge");
+        } else if (pathTwo.contains(firstWord) && pathTwo.contains(secondWord)) {
+            Collections.reverse(pathTwo);
+            mainPath.addAll(pathTwo);
+            System.out.println("Main: T1 did not merge");
+        } else {
+            System.out.println("Main: Successful merge");
+            mainPath.addAll(pathOne);
+
+            mainPath.removeIf(pathTwo::contains);
+
+            Collections.reverse(pathTwo);
+            mainPath.addAll(pathTwo);
+
+        }
 
         if (mainPath.size() > 0) {
             System.out.println("Path found: " + mainPath);
@@ -192,45 +222,6 @@ Maintenance Log:
 
     }
 
-    public static class CoordinatorThread extends Thread
-    {
-        private LinkedList<String> pathOne = new LinkedList<>();
-        private LinkedList<String> pathTwo = new LinkedList<>();
-        private String threadName = "Coordinator";
-        public void run() {
-            System.out.println(threadName + ": Running");
-            while(true) {
-                if (threadsComplete) { // change to wait / notify methods later
-
-                    pathOne = mainThreads.get(0).getPath();
-                    pathTwo = mainThreads.get(1).getPath();
-
-                    System.out.println(threadName + ": Path found");
-                    System.out.println("PathOne: " + pathOne);
-                    System.out.println("PathTwo: " + pathTwo);
-
-                    if (pathOne.contains(firstWord) && pathOne.contains(secondWord)) {
-                        mainPath.addAll(pathOne);
-                        System.out.println(threadName + ": T2 did not merge");
-                    } else if (pathTwo.contains(firstWord) && pathTwo.contains(secondWord)) {
-                        mainPath.addAll(pathTwo);
-                        System.out.println(threadName + ": T1 did not merge");
-                    } else {
-                        System.out.println(threadName + ": Successful merge");
-                        mainPath.addAll(pathOne);
-                        mainPath.removeIf((v) -> pathTwo.contains(v));
-                        for (int x = pathTwo.size() - 1; x > -1; x--) {
-                            mainPath.add(pathTwo.get(x));
-                        }
-                    }
-
-                    System.out.println(threadName + ": Complete");
-                    break;
-                }
-            }
-        }
-    }
-
     public static class MainThread extends Thread
     {
         private String firstWordT;
@@ -240,7 +231,9 @@ Maintenance Log:
         private int otherLoc;
         private int helperNum = 0;
         private ConcurrentHashMap<String, List<String>> EditNeighborsLoc = new ConcurrentHashMap<>();
+        private LinkedList<HelperThread> helpers = new LinkedList<>();
         private List<String> path = new ArrayList<>();
+        private HashSet<String> examined = new HashSet<String>();
 
         MainThread(String firstWord, String secondWord, String threadName, int loc, int otherLoc) {
             this.firstWordT = firstWord;
@@ -255,7 +248,6 @@ Maintenance Log:
                 System.out.println(threadName + ": Running");
                 boolean failed = false;
                 String target = firstWordT;
-                HashSet<String> examined = new HashSet<String>();
                 while (!target.equals(secondWordT) && !failed && !threadsComplete) { // looping until either path found or nowhere left to go
                     findNeighbors(target);
                     ArrayList<String> values = new ArrayList<String>(EditNeighborsLoc.get(target));
@@ -278,9 +270,7 @@ Maintenance Log:
                         if (!Algorithms.containsString(values.get(p), path) && !examined.contains(values.get(p))) {
                             pValues.add(values.get(p));
                             if (mainThreads.get(otherLoc).getPath().contains(values.get(p))) { // word already pathed by other thread
-                                System.out.println(threadName + ": Word found in other path");
-                                threadsComplete = true;
-                                break;
+                                interruptAndComplete(); // stop executing and interrupt other threads
                             }
                         }
                     }
@@ -339,6 +329,16 @@ Maintenance Log:
             }
         }
 
+        private void interruptAndComplete() {
+            threadsComplete = true;
+            System.out.println(threadName + ": Word found in other path");
+            System.out.println(threadName + ": Time to complete (ms): " + (System.currentTimeMillis() - beginTime));
+            System.out.println(threadName + ": Interrupting other thread");
+            mainThreads.get(otherLoc).interrupt();
+            helpers.forEach(Thread::interrupt);
+            mainThreads.get(loc).interrupt();
+        }
+
         private void findNeighbors(String target) {
             ArrayList<String> neighbors = new ArrayList<>();
 
@@ -354,12 +354,14 @@ Maintenance Log:
         }
 
         private void createHelperThread(String target) {
-            if (currentThreads.get() < MAX_THREADS) {
+            if (currentThreads.incrementAndGet() < MAX_THREADS) {
                 System.out.println(threadName + ": Creating helper");
-                currentThreads.incrementAndGet();
+                System.out.println("Current active threads: " + currentThreads.get());
                 HelperThread temp = new HelperThread(threadName + "-" + helperNum, target, mainThreads.get(loc));
                 helperNum++;
                 temp.start();
+            } else {
+                currentThreads.decrementAndGet();
             }
         }
 
@@ -372,6 +374,10 @@ Maintenance Log:
         }
         public List<String> getPath() {
             return path;
+        }
+
+        public HashSet<String> getExamined() {
+            return examined;
         }
     }
 
