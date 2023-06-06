@@ -171,6 +171,7 @@ Maintenance Log:
         mainThreads.add(new MainThread(secondWord, firstWord, "T2", 1, 0));
 
         currentThreads.set(2);
+
         mainThreads.get(0).start();
         mainThreads.get(1).start();
 
@@ -188,10 +189,6 @@ Maintenance Log:
         System.out.println("T1: Examined: " + mainThreads.get(0).getExamined());
         System.out.println("T2: Examined: " + mainThreads.get(1).getExamined());
 
-        System.out.println("Main: Path found");
-        System.out.println("PathOne: " + pathOne);
-        System.out.println("PathTwo: " + pathTwo);
-
         if (pathOne.contains(firstWord) && pathOne.contains(secondWord)) {
             mainPath.addAll(pathOne);
             System.out.println("Main: T2 did not merge");
@@ -202,15 +199,15 @@ Maintenance Log:
         } else {
             System.out.println("Main: Successful merge");
             mainPath.addAll(pathOne);
-
             mainPath.removeIf(pathTwo::contains);
-
             Collections.reverse(pathTwo);
             mainPath.addAll(pathTwo);
-
         }
 
-        if (mainPath.size() > 0) {
+        System.out.println("PathOne: " + pathOne);
+        System.out.println("PathTwo: " + pathTwo);
+
+        if (mainPath.size() > 0 && pathOne.size() > 1 && pathTwo.size() > 1) {
             System.out.println("Path found: " + mainPath);
         } else {
             System.out.println("No path found");
@@ -246,9 +243,9 @@ Maintenance Log:
         public void run() {
             try {
                 System.out.println(threadName + ": Running");
-                boolean failed = false;
+                boolean searchFailed = false;
                 String target = firstWordT;
-                while (!target.equals(secondWordT) && !failed && !threadsComplete) { // looping until either path found or nowhere left to go
+                while (!target.equals(secondWordT) && !searchFailed && !threadsComplete) { // looping until either path found or nowhere left to go
                     findNeighbors(target);
                     ArrayList<String> values = new ArrayList<String>(EditNeighborsLoc.get(target));
                     ArrayList<String> pValues = new ArrayList<>();
@@ -256,7 +253,8 @@ Maintenance Log:
 
                     if (examined.contains(target)) { // double failsafe
                         if (path.size() < 2) { // nowhere else to go
-                            failed = true;
+                            searchFailed = true;
+                            interruptAndComplete();
                             System.out.println(threadName + ": Failed");
                         } else {
                             path.remove(path.size() - 1);
@@ -267,7 +265,7 @@ Maintenance Log:
                     path.add(target);
 
                     for (int p = 0; p < values.size(); p++) { // checking for possible values we can use
-                        if (!Algorithms.containsString(values.get(p), path) && !examined.contains(values.get(p))) {
+                        if (!path.contains(values.get(p)) && !examined.contains(values.get(p))) {
                             pValues.add(values.get(p));
                             if (mainThreads.get(otherLoc).getPath().contains(values.get(p))) { // word already pathed by other thread
                                 interruptAndComplete(); // stop executing and interrupt other threads
@@ -315,7 +313,8 @@ Maintenance Log:
                     } else { // no possible values found
                         examined.add(target);
                         if (path.size() < 2) { // nowhere else to go
-                            failed = true;
+                            searchFailed = true;
+                            interruptAndComplete();
                             System.out.println(threadName + ": Failed");
                         } else {
                             path.remove(path.size() - 1);
@@ -331,7 +330,7 @@ Maintenance Log:
 
         private void interruptAndComplete() {
             threadsComplete = true;
-            System.out.println(threadName + ": Word found in other path");
+            System.out.println(threadName + ": Word found in other path or search failed");
             System.out.println(threadName + ": Time to complete (ms): " + (System.currentTimeMillis() - beginTime));
             System.out.println(threadName + ": Interrupting other thread");
             mainThreads.get(otherLoc).interrupt();
@@ -356,7 +355,6 @@ Maintenance Log:
         private void createHelperThread(String target) {
             if (currentThreads.incrementAndGet() < MAX_THREADS) {
                 System.out.println(threadName + ": Creating helper");
-                System.out.println("Current active threads: " + currentThreads.get());
                 HelperThread temp = new HelperThread(threadName + "-" + helperNum, target, mainThreads.get(loc));
                 helperNum++;
                 temp.start();
