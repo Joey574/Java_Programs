@@ -148,6 +148,7 @@ Maintenance Log:
 
             int target = 0;
             ArrayList<String> neighbors;
+
             try {
                 for (int i = 0; i < words.size(); i++) {
 
